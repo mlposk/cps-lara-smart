@@ -11,6 +11,8 @@ RUN apk add --no-cache \
     apk add --no-cache --virtual .phpize-deps && \
     docker-php-ext-install zip pdo pdo_mysql
 
+RUN apk add --update linux-headers
+
 ENV XDEBUG_VERSION=3.3.2
 RUN apk --no-cache add --virtual .build-deps \
         g++ \
