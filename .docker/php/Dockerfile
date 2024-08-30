@@ -9,9 +9,7 @@ RUN apk add --no-cache \
     gcc libc-dev make \
     sudo && \
     apk add --no-cache --virtual .phpize-deps && \
-    docker-php-ext-install zip pdo pdo_mysql \
-     && /bin/bash -lc "pecl install mongodb"  \
-        && docker-php-ext-enable mongodb
+    docker-php-ext-install zip pdo pdo_mysql
 
 ENV XDEBUG_VERSION=3.3.2
 RUN apk --no-cache add --virtual .build-deps \
