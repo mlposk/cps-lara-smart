@@ -41,8 +41,6 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=laravel
-    volumes:
-      - ".docker/mysql/data:/var/lib/mysql"
     networks:
       - larasmart-network
 
