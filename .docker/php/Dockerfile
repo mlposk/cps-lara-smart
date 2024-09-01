@@ -25,7 +25,7 @@ RUN adduser github --disabled-password
 RUN addgroup github www-data
 
 COPY ./backend /var/www/html
-EXPOSE 9000
+EXPOSE 9001
 
 RUN curl -sS https://getcomposer.org/installer | php -- \
      --install-dir=/usr/local/bin --filename=composer
