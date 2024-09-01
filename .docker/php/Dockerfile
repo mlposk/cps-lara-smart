@@ -24,7 +24,7 @@ RUN apk --no-cache add --virtual .build-deps \
 RUN adduser github --disabled-password
 RUN addgroup github www-data
 
-EXPOSE 9001
+EXPOSE 9000
 
 RUN curl -sS https://getcomposer.org/installer | php -- \
      --install-dir=/usr/local/bin --filename=composer
