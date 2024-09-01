@@ -31,5 +31,4 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
      --install-dir=/usr/local/bin --filename=composer
 
 USER github
-RUN whoami
-RUN composer install
+RUN composer dump-autoload
