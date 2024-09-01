@@ -21,7 +21,7 @@ RUN apk --no-cache add --virtual .build-deps \
     pecl install xdebug-${XDEBUG_VERSION} && \
     docker-php-ext-enable xdebug
 
-RUN adduser github
+RUN adduser github --disabled-password
 RUN addgroup github www-data
 
 EXPOSE 9000
