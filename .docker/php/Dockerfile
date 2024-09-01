@@ -21,7 +21,13 @@ RUN apk --no-cache add --virtual .build-deps \
     pecl install xdebug-${XDEBUG_VERSION} && \
     docker-php-ext-enable xdebug
 
+RUN useradd github
+RUN usermod -aG www-data github
+
 EXPOSE 9000
 
 RUN curl -sS https://getcomposer.org/installer | php -- \
      --install-dir=/usr/local/bin --filename=composer
+
+USER github
+RUN composer install
