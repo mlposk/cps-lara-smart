@@ -30,5 +30,7 @@ EXPOSE 9000
 RUN curl -sS https://getcomposer.org/installer | php -- \
      --install-dir=/usr/local/bin --filename=composer
 
+RUN chown -R github:github /var/www/html
+
 USER github
-RUN composer install
+CMD bash -c "composer install && php-fpm"
