@@ -34,7 +34,6 @@ services:
 
   larasmart-mysql:
     container_name: larasmart-mysql
-    user: "1000:1000"
     build:
       context: .
       dockerfile: .docker/mysql/Dockerfile
