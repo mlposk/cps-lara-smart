@@ -19,7 +19,7 @@ RUN apk --no-cache add --virtual .build-deps \
         autoconf \
         make && \
     pecl install xdebug-${XDEBUG_VERSION} && \
-    docker-php-ext-enable xdebug
+    docker-php-ext-enable xdebug pdo_mysql
 
 RUN adduser github --disabled-password
 RUN addgroup github www-data
