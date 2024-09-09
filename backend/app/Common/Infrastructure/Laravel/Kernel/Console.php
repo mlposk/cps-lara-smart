@@ -5,8 +5,6 @@ namespace App\Common\Infrastructure\Laravel\Kernel;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
-use function App\Console\base_path;
-
 class Console extends ConsoleKernel
 {
     /**
