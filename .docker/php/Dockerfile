@@ -32,4 +32,4 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
 RUN chown -R github:github /var/www/html
 
 USER github
-CMD bash -c "composer install && php-fpm"
+CMD bash -c "composer update && php-fpm"
