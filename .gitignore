@@ -19,3 +19,5 @@ Homestead.json
 .idea/
 deploy.sh
 *.log
+
+.docker/mysql/data/
