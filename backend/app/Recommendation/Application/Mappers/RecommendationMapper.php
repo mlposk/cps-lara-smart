@@ -16,7 +16,8 @@ class RecommendationMapper{
 
         return new Recommendation(
             id: $id,
-            query: $request->input('query')
+            query: $request->input('query'),
+            answer: $request->input('answer')
         );
     }
 

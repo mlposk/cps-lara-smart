@@ -3,6 +3,7 @@
 namespace App\Recommendation\Domain\Model\Aggregates;
 
 use App\Recommendation\Domain\Model\Entities\Task;
+use Illuminate\Database\Eloquent\Model;
 
 class Recommendation
 {

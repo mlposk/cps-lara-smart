@@ -177,6 +177,10 @@ return [
         \App\Common\Infrastructure\Laravel\Providers\EventServiceProvider::class,
         \App\Common\Infrastructure\Laravel\Providers\RouteServiceProvider::class,
 
+
+        //region Domain providers
+        \App\Recommendation\Application\Providers\RecommendationServiceProvider::class
+        //endregion
     ],
 
     /*

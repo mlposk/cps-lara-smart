@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class RecommendationEloquentModel extends Model
 {
 
-    protected $table = 'recommendation';
+    protected $table = 'recommendations';
 
     /**
      * The attributes that are mass assignable.
