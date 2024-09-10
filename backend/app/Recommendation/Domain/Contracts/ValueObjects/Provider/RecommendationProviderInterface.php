@@ -2,6 +2,7 @@
 
 namespace App\Recommendation\Domain\Contracts\ValueObjects\Provider;
 
-interface RecommendationProviderInterface {
-    public function make();
+interface RecommendationProviderInterface
+{
+    public function getSuggestion($query);
 }

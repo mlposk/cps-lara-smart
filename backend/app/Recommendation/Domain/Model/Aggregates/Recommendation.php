@@ -4,19 +4,19 @@ namespace App\Recommendation\Domain\Model\Aggregates;
 
 use App\Recommendation\Domain\Contracts\ValueObjects\Expert\RecommendationExpertInterface;
 use App\Recommendation\Domain\Contracts\ValueObjects\Provider\RecommendationProviderInterface;
-use App\Recommendation\Domain\Model\Entities\Task;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 class Recommendation
 {
-
     private Сonclusion $conclusion;
+    private Suggestion $suggestion;
+
     private RecommendationExpertInterface $expert;
+    private RecommendationProviderInterface $provider;
 
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
-    }
-
+    /**
+     * @throws BindingResolutionException
+     */
     public function __construct(
         public ?int $id,
         public string $query,
@@ -25,24 +25,28 @@ class Recommendation
         $this->initDependencies();
     }
 
-
-    private function initСonclusion(){
-        $this->conclusion = $this->expert->getConclusion();
-    }
-
-    private function initAnswer(){
-        $this->suggestion = $this->provider->getSuggestion($this->conclusion);
-    }
-
-    public function suggest(){
+    public function suggest()
+    {
         $this->process();
     }
 
-
-    private function initDependencies()
+    /**
+     * @throws BindingResolutionException
+     */
+    private function initDependencies(): void
     {
         $this->expert = app()->make(RecommendationExpertInterface::class);
         $this->provider = app()->make(RecommendationProviderInterface::class);
+    }
+
+    private function initConclusion(): void
+    {
+        $this->conclusion = $this->expert->getConclusion($this->query);
+    }
+
+    private function initAnswer(): void
+    {
+        $this->suggestion = $this->provider->getSuggestion($this->conclusion);
     }
 
     private function process()

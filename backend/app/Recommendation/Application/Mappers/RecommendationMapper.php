@@ -3,7 +3,6 @@
 namespace App\Recommendation\Application\Mappers;
 
 use App\Recommendation\Domain\Model\Aggregates\Recommendation;
-use App\Recommendation\Domain\Model\Entities\Task;
 use App\Recommendation\Infrastructure\EloquentModels\RecommendationEloquentModel;
 use Illuminate\Http\Request;
 

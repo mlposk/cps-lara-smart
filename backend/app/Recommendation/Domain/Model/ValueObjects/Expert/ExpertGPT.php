@@ -2,13 +2,12 @@
 
 namespace App\Recommendation\Domain\Model\ValueObjects\Expert;
 
+use App\Recommendation\Domain\Contracts\ValueObjects\Expert\RecommendationExpertInterface;
 
-use App\Recommendation\Domain\Contracts\ValueObjects\RecommendationModelInterface;
-
-class ExpertGPT implements RecommendationModelInterface{
-
-    public function make()
+class ExpertGPT implements RecommendationExpertInterface
+{
+    public function getConclusion($query)
     {
-        // TODO: Implement make() method.
+        // TODO: Implement getConclusion() method.
     }
 }

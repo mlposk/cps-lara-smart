@@ -12,7 +12,6 @@ class RecommendationRepository implements RecommendationRepositoryInterface
     public function getAll(): array
     {
         return RecommendationEloquentModel::all()->toArray();
-        // TODO: Implement index() method.
     }
 
     public function store(Recommendation $recommendation)

@@ -4,6 +4,11 @@ namespace App\Recommendation\Infrastructure\EloquentModels;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int|null $id
+ * @property string $query
+ * @property string|null $answer
+ */
 class RecommendationEloquentModel extends Model
 {
 
