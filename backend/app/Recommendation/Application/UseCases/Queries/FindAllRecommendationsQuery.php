@@ -2,7 +2,7 @@
 
 namespace App\Recommendation\Application\UseCases\Queries;
 
-use App\Recommendation\Domain\Repositories\RecommendationRepositoryInterface;
+use App\Recommendation\Domain\Contracts\Repositories\RecommendationRepositoryInterface;
 
 class FindAllRecommendationsQuery
 {

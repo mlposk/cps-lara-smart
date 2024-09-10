@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Recommendation\Domain\Repositories;
+namespace App\Recommendation\Domain\Contracts\Repositories;
 
 use App\Recommendation\Domain\Model\Aggregates\Recommendation;
-use Illuminate\Http\Request;
 
 interface RecommendationRepositoryInterface
 {
