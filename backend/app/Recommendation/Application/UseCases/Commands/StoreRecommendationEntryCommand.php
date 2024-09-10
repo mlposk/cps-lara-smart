@@ -2,8 +2,8 @@
 
 namespace App\Recommendation\Application\UseCases\Commands;
 
+use App\Recommendation\Domain\Contracts\Repositories\RecommendationRepositoryInterface;
 use App\Recommendation\Domain\Model\Aggregates\Recommendation;
-use App\Recommendation\Domain\Repositories\RecommendationRepositoryInterface;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 class StoreRecommendationEntryCommand
