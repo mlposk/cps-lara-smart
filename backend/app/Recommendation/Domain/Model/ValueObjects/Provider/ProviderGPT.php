@@ -42,7 +42,7 @@ class ProviderGPT implements RecommendationProviderInterface
 
     private function getResult($query): array
     {
-        $ch = curl_init($this->api_url);
+        $ch = curl_init($this->apiUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $this->prepareHeaders());
@@ -58,7 +58,7 @@ class ProviderGPT implements RecommendationProviderInterface
     {
         return [
             'Content-Type: application/json',
-            'Authorization: Bearer ' . $this->api_key,
+            'Authorization: Bearer ' . $this->apiKey,
         ];
     }
 }
