@@ -7,6 +7,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
 use App\Common\Infrastructure\Laravel\Controllers\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use App\Recommendation\Domain\Model\Aggregates\Recommendation;
 
 class RecommendationController extends Controller
 {
@@ -36,6 +37,6 @@ class RecommendationController extends Controller
 
     public function handleText(Request $request)
     {
-        return "text endpoint";
+        return response()->success((new Recommendation(null, $request->toArray()))->suggest());
     }
 }
