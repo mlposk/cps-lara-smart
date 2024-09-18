@@ -22,12 +22,12 @@ class ProviderGPT implements RecommendationProviderInterface
 
     private function initApiKey(): void
     {
-        $this->apiKey = getenv('CHATGPT_API_KEY');
+        $this->apiKey = config('gpt.key');;
     }
 
     private function initApiUrl(): void
     {
-        $this->apiUrl = getenv('CHATGPT_API_URL');
+        $this->apiUrl = config('gpt.url');;
     }
 
     public function getSuggestion($query): array
