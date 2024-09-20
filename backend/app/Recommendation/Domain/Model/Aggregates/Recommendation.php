@@ -8,8 +8,10 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 
 class Recommendation
 {
-    private Сonclusion $conclusion;
-    private Suggestion $suggestion;
+//    private Message $message;
+    private array $message;
+    private array $suggestion;
+//    private Suggestion $suggestion;
 
     private RecommendationExpertInterface $expert;
     private RecommendationProviderInterface $provider;
@@ -19,14 +21,17 @@ class Recommendation
      */
     public function __construct(
         public ?int $id,
-        public string $query,
+        public array $query,
         public ?string $answer = null,
     ) {
         $this->initDependencies();
+        $this->initMessage();
+        $this->initAnswer();
     }
 
     public function suggest()
     {
+        return $this->suggestion;
         $this->process();
     }
 
@@ -35,18 +40,24 @@ class Recommendation
      */
     private function initDependencies(): void
     {
-        $this->expert = app()->make(RecommendationExpertInterface::class);
+        $this->expert = app()->make(
+            RecommendationExpertInterface::class,
+            [
+                'taskData' => json_decode(html_entity_decode($this->query['payload']), true),
+                'isPostCondition' => true
+            ]
+        );
         $this->provider = app()->make(RecommendationProviderInterface::class);
     }
 
-    private function initConclusion(): void
+    private function initMessage(): void
     {
-        $this->conclusion = $this->expert->getConclusion($this->query);
+        $this->message = $this->expert->getMessage();
     }
 
     private function initAnswer(): void
     {
-        $this->suggestion = $this->provider->getSuggestion($this->conclusion);
+        $this->suggestion = $this->provider->getSuggestion($this->message);
     }
 
     private function process()
