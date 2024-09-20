@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Recommendation\Presentation\API;
 
+use App\Recommendation\Application\Mappers\RecommendationMapper;
 use App\Recommendation\Application\UseCases\Commands\StoreRecommendationEntryCommand;
 use App\Recommendation\Application\UseCases\Queries\FindAllRecommendationsQuery;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -27,7 +29,7 @@ class RecommendationController extends Controller
     {
         $result = [];
         $arrayFromFile = $request;
-        foreach ($arrayFromFile as $payload){
+        foreach ($arrayFromFile as $payload) {
             $result[] = (new StoreRecommendationEntryCommand($payload))->execute();
         }
 
@@ -35,8 +37,13 @@ class RecommendationController extends Controller
         return "file endpoint";
     }
 
+    /**
+     * @throws BindingResolutionException
+     */
     public function handleText(Request $request)
     {
-        return response()->success((new Recommendation(null, $request->toArray()))->suggest());
+        $recommendation = RecommendationMapper::fromRequest($request);
+
+        return response()->success($recommendation->toArray());
     }
 }
