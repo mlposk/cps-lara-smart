@@ -3,7 +3,7 @@
 namespace App\Recommendation\Domain\Model\Entities;
 
 use App\Common\Domain\Entity;
-use App\Recommendation\Domain\Model\ValueObjects\Query;
+use App\Recommendation\Domain\Model\ValueObjects\Query\Query;
 
 class Answer extends Entity
 {

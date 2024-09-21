@@ -2,11 +2,11 @@
 
 namespace App\Recommendation\Application\Mappers;
 
-use App\Recommendation\Domain\Model\ValueObjects\Body;
-use App\Recommendation\Domain\Model\ValueObjects\Query;
-use App\Recommendation\Domain\Model\ValueObjects\Title;
-use App\Recommendation\Domain\Model\ValueObjects\Project;
-use App\Recommendation\Domain\Model\ValueObjects\Deadline;
+use App\Recommendation\Domain\Model\ValueObjects\Query\Body;
+use App\Recommendation\Domain\Model\ValueObjects\Query\Query;
+use App\Recommendation\Domain\Model\ValueObjects\Query\Title;
+use App\Recommendation\Domain\Model\ValueObjects\Query\Project;
+use App\Recommendation\Domain\Model\ValueObjects\Query\Deadline;
 
 use Exception;
 use Illuminate\Http\Request;

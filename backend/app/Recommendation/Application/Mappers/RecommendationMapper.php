@@ -4,7 +4,7 @@ namespace App\Recommendation\Application\Mappers;
 
 use App\Recommendation\Domain\Model\Aggregates\Recommendation;
 use App\Recommendation\Domain\Model\Entities\Answer;
-use App\Recommendation\Domain\Model\ValueObjects\Query;
+use App\Recommendation\Domain\Model\ValueObjects\Query\Query;
 use App\Recommendation\Infrastructure\EloquentModels\RecommendationEloquentModel;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
