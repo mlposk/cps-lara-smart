@@ -37,7 +37,7 @@ class PromptValueObject
             array_values($this->taskData),
             '
                     Название задачи: "title".
-                    Описание задачи: "description"
+                    Описание задачи: "body"
                     Проект: "project".
                 '
         );

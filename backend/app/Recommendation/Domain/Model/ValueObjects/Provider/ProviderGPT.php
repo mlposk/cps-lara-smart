@@ -22,12 +22,12 @@ class ProviderGPT implements RecommendationProviderInterface
 
     private function initApiKey(): void
     {
-        $this->apiKey = config('gpt.key');;
+        $this->apiKey = config('gpt.key');
     }
 
     private function initApiUrl(): void
     {
-        $this->apiUrl = config('gpt.url');;
+        $this->apiUrl = config('gpt.url');
     }
 
     public function getSuggestion($query): array

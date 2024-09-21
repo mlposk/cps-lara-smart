@@ -16,18 +16,22 @@ class ExpertGPT implements RecommendationExpertInterface
     private StreamValueObject $stream;
     private array $taskData;
 
-    public function __construct(array $taskData, bool|null $isPostCondition = null)
+    public function __construct()
     {
-        $this->taskData = $taskData;
-        $this->init($isPostCondition);
     }
 
-    private function init(bool|null $isPostCondition): void
+    private function init(array $taskData, bool|null $isPostCondition): void
     {
+        $this->initTaskData($taskData);
         $this->initModel();
         $this->initPrompt($isPostCondition);
         $this->initContext();
         $this->initStream();
+    }
+
+    private function initTaskData(array $taskData): void
+    {
+        $this->taskData = $taskData;
     }
 
     private function initModel(): void
@@ -50,7 +54,14 @@ class ExpertGPT implements RecommendationExpertInterface
         $this->stream = new StreamValueObject();
     }
 
-    public function getMessage(): array
+    public function getMessage(array $taskData, bool|null $isPostCondition = null): array
+    {
+        $this->init($taskData, $isPostCondition);
+
+        return $this->formMessage();
+    }
+
+    private function formMessage(): array
     {
         return [
             'model' => $this->model->getModel(),
