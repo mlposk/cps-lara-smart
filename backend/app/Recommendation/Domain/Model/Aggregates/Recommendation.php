@@ -6,7 +6,7 @@ use App\Common\Domain\AggregateRoot;
 use App\Recommendation\Domain\Contracts\ValueObjects\Expert\RecommendationExpertInterface;
 use App\Recommendation\Domain\Contracts\ValueObjects\Provider\RecommendationProviderInterface;
 use App\Recommendation\Domain\Model\Entities\Answer;
-use App\Recommendation\Domain\Model\ValueObjects\Query;
+use App\Recommendation\Domain\Model\ValueObjects\Query\Query;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 class Recommendation extends AggregateRoot

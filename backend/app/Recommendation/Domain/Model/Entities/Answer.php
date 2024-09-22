@@ -3,15 +3,36 @@
 namespace App\Recommendation\Domain\Model\Entities;
 
 use App\Common\Domain\Entity;
-use App\Recommendation\Domain\Model\ValueObjects\Query;
+use App\Recommendation\Domain\Model\ValueObjects\Query\Query;
+use App\Recommendation\Domain\Model\ValueObjects\Expert\ExpertGPT;
+use App\Recommendation\Domain\Model\ValueObjects\Provider\ProviderGPT;
 
 class Answer extends Entity
 {
 
     private Query $query;
+    private ExpertGPT $expert;
+    private ProviderGPT $provider;
 
     public function __construct()
     {
+        $this->init();
+    }
+
+    private function init(): void
+    {
+        $this->initExpert();
+        $this->initProvider();
+    }
+
+    private function initExpert(): void
+    {
+        $this->expert = new ExpertGPT();
+    }
+
+    private function initProvider(): void
+    {
+        $this->provider = new ProviderGPT();
     }
 
     /**
@@ -25,9 +46,7 @@ class Answer extends Entity
 
     public function toArray(): array
     {
-        return [
-            'test' => 'Texte tete',
-            'message' => 'Some text'
-        ];
+        $message = $this->expert->getMessage($this->query->toArray(), true);
+        return $this->provider->getSuggestion($message);
     }
 }

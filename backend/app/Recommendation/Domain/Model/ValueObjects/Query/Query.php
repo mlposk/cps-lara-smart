@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Recommendation\Domain\Model\ValueObjects;
+namespace App\Recommendation\Domain\Model\ValueObjects\Query;
 
 
 use App\Common\Domain\ValueObject;
