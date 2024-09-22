@@ -3,6 +3,7 @@
 namespace App\Recommendation\Domain\Model\ValueObjects\Provider;
 
 use App\Recommendation\Domain\Contracts\ValueObjects\Provider\RecommendationProviderInterface;
+use App\Recommendation\Domain\Model\ValueObjects\Provider\Result;
 
 class ProviderGPT implements RecommendationProviderInterface
 {
@@ -30,14 +31,15 @@ class ProviderGPT implements RecommendationProviderInterface
         $this->apiUrl = config('gpt.url');
     }
 
-    public function getSuggestion($query): array
+    /**
+     * @throws \Exception
+     */
+    public function getSuggestion($query): Result
     {
         $response_data = $this->getResult($query);
         $response = explode('%d%', $response_data['choices'][0]['message']['content']);
-        return [
-            'smart_title' => $response[0],
-            'recommendation' => $response[1]
-        ];
+
+        return new Result(new SmartTitle($response[0]), new Recommendation($response[1]));
     }
 
     private function getResult($query): array

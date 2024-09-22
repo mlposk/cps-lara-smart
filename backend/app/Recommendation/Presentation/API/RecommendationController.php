@@ -42,8 +42,13 @@ class RecommendationController extends Controller
      */
     public function handleText(Request $request)
     {
-        $recommendation = RecommendationMapper::fromRequest($request);
-
-        return response()->success($recommendation->toArray());
+        try {
+            $recommendation = RecommendationMapper::fromRequest($request);
+            return response()->success($recommendation->toArray());
+        } catch (\DomainException $domainException) {
+            return response()->error($domainException->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        } catch (\Throwable $throwable) {
+            return response()->error($throwable->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

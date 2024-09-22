@@ -2,13 +2,10 @@
 
 namespace App\Recommendation\Domain\Model\ValueObjects\Query;
 
-use Exception;
 
 class Body
 {
-    /**
-     * @throws Exception
-     */
+
     public function __construct(public ?string $body)
     {
     }
