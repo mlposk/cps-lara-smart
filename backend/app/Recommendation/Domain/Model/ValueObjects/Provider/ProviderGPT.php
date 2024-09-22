@@ -4,7 +4,6 @@ namespace App\Recommendation\Domain\Model\ValueObjects\Provider;
 
 use App\Recommendation\Domain\Contracts\ValueObjects\Provider\RecommendationProviderInterface;
 use App\Recommendation\Domain\Model\ValueObjects\Provider\Result;
-use Exception;
 
 class ProviderGPT implements RecommendationProviderInterface
 {
@@ -33,27 +32,27 @@ class ProviderGPT implements RecommendationProviderInterface
     }
 
     /**
-     * @throws Exception
+     * @throws \DomainException
      */
     public function getSuggestion($query): Result
     {
         $response_data = $this->getResult($query);
 
         if (!isset($response_data['choices'][0]['message']['content'])) {
-            throw new Exception('Invalid response format: content is missing');
+            throw new \DomainException('Invalid response format: content is missing');
         }
 
         $response = explode('%d%', $response_data['choices'][0]['message']['content']);
 
         if (count($response) < 2) {
-            throw new Exception('Invalid response format: expected 2 parts, but received ' . count($response));
+            throw new \DomainException('Invalid response format: expected 2 parts, but received ' . count($response));
         }
 
         return new Result(new SmartTitle($response[0]), new Recommendation($response[1]));
     }
 
     /**
-     * @throws Exception
+     * @throws \DomainException
      */
     private function getResult($query): array
     {
@@ -68,11 +67,11 @@ class ProviderGPT implements RecommendationProviderInterface
         curl_close($ch);
 
         if ($response === false) {
-            throw new Exception('Failed to get response from language model');
+            throw new \DomainException('Failed to get response from language model');
         }
 
         if ($httpCode !== 200) {
-            throw new Exception("Language model returned an invalid status code: $httpCode");
+            throw new \DomainException("Language model returned an invalid status code: $httpCode");
         }
 
         return json_decode($response, true);
