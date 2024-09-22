@@ -52,7 +52,8 @@ class Answer extends Entity
         $this->provider = app()->make(RecommendationProviderInterface::class);;
     }
 
-    public function execute(){
+    public function execute(): void
+    {
         $message = $this->expert->getMessage($this->query->toArray(), true);
         $this->answer = $this->provider->getSuggestion($message);
     }

@@ -44,6 +44,7 @@ class RecommendationController extends Controller
     {
         try {
             $recommendation = RecommendationMapper::fromRequest($request);
+            $recommendation->execute();
             return response()->success($recommendation->toArray());
         } catch (\DomainException $domainException) {
             return response()->error($domainException->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
