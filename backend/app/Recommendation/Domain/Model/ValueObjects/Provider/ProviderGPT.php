@@ -3,6 +3,7 @@
 namespace App\Recommendation\Domain\Model\ValueObjects\Provider;
 
 use App\Recommendation\Domain\Contracts\ValueObjects\Provider\RecommendationProviderInterface;
+use App\Recommendation\Domain\Model\ValueObjects\Provider\Result;
 
 class ProviderGPT implements RecommendationProviderInterface
 {
@@ -30,16 +31,29 @@ class ProviderGPT implements RecommendationProviderInterface
         $this->apiUrl = config('gpt.url');
     }
 
-    public function getSuggestion($query): array
+    /**
+     * @throws \DomainException
+     */
+    public function getSuggestion($query): Result
     {
         $response_data = $this->getResult($query);
+
+        if (!isset($response_data['choices'][0]['message']['content'])) {
+            throw new \DomainException('Invalid response format: content is missing');
+        }
+
         $response = explode('%d%', $response_data['choices'][0]['message']['content']);
-        return [
-            'smart_title' => $response[0],
-            'recommendation' => $response[1]
-        ];
+
+        if (count($response) < 2) {
+            throw new \DomainException('Invalid response format: expected 2 parts, but received ' . count($response));
+        }
+
+        return new Result(new SmartTitle($response[0]), new Recommendation($response[1]));
     }
 
+    /**
+     * @throws \DomainException
+     */
     private function getResult($query): array
     {
         $ch = curl_init($this->apiUrl);
@@ -49,7 +63,16 @@ class ProviderGPT implements RecommendationProviderInterface
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($query));
 
         $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
+
+        if ($response === false) {
+            throw new \DomainException('Failed to get response from language model');
+        }
+
+        if ($httpCode !== 200) {
+            throw new \DomainException("Language model returned an invalid status code: $httpCode");
+        }
 
         return json_decode($response, true);
     }

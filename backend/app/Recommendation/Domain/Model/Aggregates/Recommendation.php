@@ -25,6 +25,11 @@ class Recommendation extends AggregateRoot
         return $this;
     }
 
+    public function execute(): void
+    {
+        $this->answer->execute();
+    }
+
     public function toArray(): array
     {
         return [
