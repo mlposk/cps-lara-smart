@@ -64,7 +64,8 @@ services:
       - larasmart-network
 
   larasmart-grafana:
-    image: grafana/grafana
+    build:
+      context: .docker/redis
     ports:
       - "3000:3000"
     environment:
