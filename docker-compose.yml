@@ -30,7 +30,7 @@ services:
     ports:
       - "3301:3306"
     volumes:
-      - ".docker/mysql/data:/var/lib/mysql"
+      - mysql-storage:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=laravel
@@ -48,7 +48,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - ".docker/redis/data:/data"
+      - redis-storage:/data
     depends_on:
       - larasmart-fpm
     networks:
@@ -64,14 +64,13 @@ services:
       - larasmart-network
 
   larasmart-grafana:
-    build:
-      context: .docker/grafana
+    image: grafana/grafana
     ports:
       - "3000:3000"
     environment:
       GF_SECURITY_ADMIN_PASSWORD: "admin"
     volumes:
-      - ".docker/grafana/data:/var/lib/grafana"
+      - grafana-storage:/var/lib/grafana
     depends_on:
       - larasmart-prometheus
     networks:
@@ -79,3 +78,8 @@ services:
 
 networks:
   larasmart-network:
+
+volumes:
+  grafana-storage:
+  redis-storage:
+  mysql-storage:
