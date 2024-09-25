@@ -1,5 +1,10 @@
 FROM php:8.3-fpm-alpine
 
+ARG USER=github
+ARG GROUP=github
+ARG XDEBUG_VERSION=3.3.2
+
+#region install & update dependencies
 RUN apk add --no-cache \
     bash \
     libzip \
@@ -13,23 +18,45 @@ RUN apk add --no-cache \
 
 RUN apk add --update linux-headers
 
-ENV XDEBUG_VERSION=3.3.2
 RUN apk --no-cache add --virtual .build-deps \
         g++ \
         autoconf \
         make && \
     pecl install xdebug-${XDEBUG_VERSION} && \
     docker-php-ext-enable xdebug pdo_mysql
+#endregion
 
-RUN adduser github --disabled-password
-RUN addgroup github www-data
+#region change shell
+SHELL ["/bin/bash", "-c"]
+#endregion
 
+#region listen xdebug connections
 EXPOSE 9003
+#endregion
 
-RUN curl -sS https://getcomposer.org/installer | php -- \
-     --install-dir=/usr/local/bin --filename=composer
+#region add docker host related user
+RUN adduser ${USER} --disabled-password
+RUN addgroup ${GROUP} www-data
+#endregion
 
-RUN chown -R github:github /var/www/html
+#region copy config files
+COPY php.ini /usr/local/etc/php/php.ini
+COPY supervisor.conf /etc/supervisor/conf.d/supervisor.conf
+#endregion
 
-USER github
-CMD bash -c "composer install && php-fpm"
+#region install composer
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+#endregion
+
+#region set rights
+RUN mkdir -p /tmp/supervisor/
+#endregion
+
+#region set rights
+RUN chown -R ${USER}:${GROUP} /var/www/html /tmp/supervisor/
+#endregion
+
+USER ${USER}
+RUN composer install
+
+CMD /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisor.conf

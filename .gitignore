@@ -20,4 +20,4 @@ Homestead.json
 deploy.sh
 *.log
 
-.docker/mysql/data/
+.docker/**/data/

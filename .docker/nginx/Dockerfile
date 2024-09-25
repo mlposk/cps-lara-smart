@@ -1,9 +1,5 @@
 FROM nginx:stable-alpine
 
-ARG UID
-ARG GID
-
-ENV UID=${UID}
-ENV GID=${GID}
-
 EXPOSE 8081
+
+ADD default.conf /etc/nginx/conf.d/default.conf
