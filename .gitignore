@@ -21,3 +21,4 @@ deploy.sh
 *.log
 
 .docker/**/data/
+composer.lock

@@ -6,12 +6,14 @@ ARG XDEBUG_VERSION=3.3.2
 
 #region install & update dependencies
 RUN apk add --no-cache \
+    git \
     bash \
     libzip \
     libzip-dev \
     autoconf \
     bind-tools \
     gcc libc-dev make \
+    supervisor \
     sudo && \
     apk add --no-cache --virtual .phpize-deps && \
     docker-php-ext-install zip pdo pdo_mysql
@@ -53,10 +55,8 @@ RUN mkdir -p /tmp/supervisor/
 #endregion
 
 #region set rights
-RUN chown -R ${USER}:${GROUP} /var/www/html /tmp/supervisor/
+RUN chown -R ${USER}:${GROUP} /var/www/html /tmp/supervisor
 #endregion
 
 USER ${USER}
-RUN composer install
-
-CMD /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisor.conf
+CMD /usr/bin/supervisord -n -c /etc/supervisor/conf.d/supervisor.conf
