@@ -76,6 +76,27 @@ services:
     networks:
       - larasmart-network
 
+  larasmart-promtail:
+    image: grafana/promtail
+    build:
+      context: .docker/promtail
+    volumes:
+      - /var/log:/var/log/host
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    depends_on:
+      - larasmart-prometheus
+    networks:
+      - larasmart-network
+
+  larasmart-loki:
+    image: grafana/loki
+    ports:
+      - "3100:3100"
+    depends_on:
+      - larasmart-prometheus
+    networks:
+      - larasmart-network
+
 networks:
   larasmart-network:
 
