@@ -27,6 +27,10 @@ class RecommendationController extends Controller
      */
     public function handleFile(Request $request)
     {
+
+        $validated = $request->validated();
+
+
         $result = [];
         $arrayFromFile = $request;
         foreach ($arrayFromFile as $payload) {
