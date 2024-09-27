@@ -2,6 +2,7 @@
 
 namespace App\Recommendation\Infrastructure\Mail;
 
+use App\Recommendation\Application\DTO\AttachmentRecommendationDto;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
@@ -9,8 +10,6 @@ use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Str;
-
 class ProcessedFileEmail extends Mailable
 {
     use Queueable, SerializesModels;
@@ -20,7 +19,9 @@ class ProcessedFileEmail extends Mailable
      *
      * @return void
      */
-    public function __construct(private readonly string $url)
+    public function __construct(
+        public readonly AttachmentRecommendationDto $attachmentRecommendationDto
+    )
     {
     }
 
@@ -57,7 +58,7 @@ class ProcessedFileEmail extends Mailable
     public function attachments(): array
     {
         return [
-            Attachment::fromPath($this->url),
+            Attachment::fromPath($this->attachmentRecommendationDto->filePath),
         ];
     }
 }
