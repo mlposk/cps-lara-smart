@@ -16,7 +16,7 @@ RUN apk add --no-cache \
     supervisor \
     sudo && \
     apk add --no-cache --virtual .phpize-deps && \
-    docker-php-ext-install zip pdo pdo_mysql
+    docker-php-ext-install zip pdo pdo_mysql pcntl
 
 RUN apk add --update linux-headers
 
@@ -25,7 +25,7 @@ RUN apk --no-cache add --virtual .build-deps \
         autoconf \
         make && \
     pecl install xdebug-${XDEBUG_VERSION} && \
-    docker-php-ext-enable xdebug pdo_mysql
+    docker-php-ext-enable xdebug pdo_mysql pcntl
 #endregion
 
 #region change shell
