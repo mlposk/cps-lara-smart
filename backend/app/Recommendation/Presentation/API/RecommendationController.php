@@ -7,10 +7,14 @@ use App\Recommendation\Application\Mappers\RecommendationMapper;
 use App\Recommendation\Application\UseCases\Commands\StoreRecommendationEntryCommand;
 use App\Recommendation\Application\UseCases\Queries\FindAllRecommendationsQuery;
 use App\Recommendation\Infrastructure\Jobs\PerformRecommendationFile;
+use App\Recommendation\Infrastructure\Mail\ConfirmEmail;
+use App\Recommendation\Infrastructure\Mail\ProcessedFileEmail;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
 use App\Common\Infrastructure\Laravel\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 use App\Recommendation\Domain\Model\Aggregates\Recommendation;
 
@@ -33,22 +37,18 @@ class RecommendationController extends Controller
     {
         try {
 
-            $validated = $request->validate([
-                'file' => 'required|mimes:csv',
+            $request->validate([
+                'file' => 'required',
                 'email' => 'required'
             ]);
 
-
-            if (!$request->has('file')) {
-                throw new \Exception('No file');
-            }
-
             $uuid = str()->uuid();
             $file = $request->file('file');
+
             $fileUrl = Storage::disk('public')->putFileAs(
                 'recommendations',
                 $file,
-                $uuid . '.' . $file->extension()
+                $uuid . '.' . $file->getClientOriginalExtension()
             );
 
             $attachmentDto = new AttachmentRecommendationDto(
@@ -60,7 +60,10 @@ class RecommendationController extends Controller
             $job = new PerformRecommendationFile($attachmentDto);
             dispatch($job);
 
-        } catch (\Illuminate\Validation\ValidationException $throwable) {
+            Mail::to($attachmentDto->userEmail)
+                ->send(new ConfirmEmail($attachmentDto));
+
+        } catch (ValidationException $throwable) {
             return response()->error($throwable->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
         } catch (\Throwable $throwable) {
             return response()->error($throwable->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);

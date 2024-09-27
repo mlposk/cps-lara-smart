@@ -2,6 +2,7 @@
 
 namespace App\Recommendation\Infrastructure\Mail;
 
+use App\Recommendation\Application\DTO\AttachmentRecommendationDto;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
@@ -19,7 +20,9 @@ class ConfirmEmail extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(
+        public readonly AttachmentRecommendationDto $attachmentRecommendationDto
+    )
     {
         //
     }
@@ -32,7 +35,8 @@ class ConfirmEmail extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Email Message',
+            from: new Address('quadramind@email.com', 'Сервис Smart-рекомендаций'),
+            subject: 'Подтверждение создания задания на обработку файла',
         );
     }
 
