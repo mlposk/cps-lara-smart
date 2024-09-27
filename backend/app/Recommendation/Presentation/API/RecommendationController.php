@@ -2,12 +2,15 @@
 
 namespace App\Recommendation\Presentation\API;
 
+use App\Recommendation\Application\DTO\AttachmentRecommendationDto;
 use App\Recommendation\Application\Mappers\RecommendationMapper;
 use App\Recommendation\Application\UseCases\Commands\StoreRecommendationEntryCommand;
 use App\Recommendation\Application\UseCases\Queries\FindAllRecommendationsQuery;
+use App\Recommendation\Infrastructure\Jobs\PerformRecommendationFile;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
 use App\Common\Infrastructure\Laravel\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 use App\Recommendation\Domain\Model\Aggregates\Recommendation;
 
@@ -24,21 +27,33 @@ class RecommendationController extends Controller
 
     /**
      * @throws BindingResolutionException
+     * @throws \Exception
      */
     public function handleFile(Request $request)
     {
 
-        $validated = $request->validated();
+        // $validated = $request->validated();
 
 
-        $result = [];
-        $arrayFromFile = $request;
-        foreach ($arrayFromFile as $payload) {
-            $result[] = (new StoreRecommendationEntryCommand($payload))->execute();
+        if(!$request->has('file')){
+            throw new \Exception('No file');
         }
 
-        $newFile = $result;
-        return "file endpoint";
+        $uuid = str()->uuid();
+        $file = $request->file('file');
+        $fileUrl = Storage::disk('public')->putFileAs('recommendations',
+            $file,
+            $uuid . '.' . $file->extension()
+        );
+
+        $attachmentDto = new AttachmentRecommendationDto(
+            jobId: $uuid,
+            userEmail: $request->input('email'),
+            filePath: Storage::disk('public')->url($fileUrl)
+        );
+
+        $job = new PerformRecommendationFile($attachmentDto);
+        dispatch($job);
     }
 
     /**
