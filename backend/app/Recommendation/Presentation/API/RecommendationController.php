@@ -31,29 +31,40 @@ class RecommendationController extends Controller
      */
     public function handleFile(Request $request)
     {
+        try {
 
-        // $validated = $request->validated();
+            $validated = $request->validate([
+                'file' => 'required|mimes:csv',
+                'email' => 'required'
+            ]);
 
 
-        if(!$request->has('file')){
-            throw new \Exception('No file');
+            if (!$request->has('file')) {
+                throw new \Exception('No file');
+            }
+
+            $uuid = str()->uuid();
+            $file = $request->file('file');
+            $fileUrl = Storage::disk('public')->putFileAs(
+                'recommendations',
+                $file,
+                $uuid . '.' . $file->extension()
+            );
+
+            $attachmentDto = new AttachmentRecommendationDto(
+                jobId: $uuid,
+                userEmail: $request->input('email'),
+                filePath: Storage::disk('public')->url($fileUrl)
+            );
+
+            $job = new PerformRecommendationFile($attachmentDto);
+            dispatch($job);
+
+        } catch (\Illuminate\Validation\ValidationException $throwable) {
+            return response()->error($throwable->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        } catch (\Throwable $throwable) {
+            return response()->error($throwable->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        $uuid = str()->uuid();
-        $file = $request->file('file');
-        $fileUrl = Storage::disk('public')->putFileAs('recommendations',
-            $file,
-            $uuid . '.' . $file->extension()
-        );
-
-        $attachmentDto = new AttachmentRecommendationDto(
-            jobId: $uuid,
-            userEmail: $request->input('email'),
-            filePath: Storage::disk('public')->url($fileUrl)
-        );
-
-        $job = new PerformRecommendationFile($attachmentDto);
-        dispatch($job);
     }
 
     /**
