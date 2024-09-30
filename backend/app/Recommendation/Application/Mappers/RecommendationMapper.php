@@ -28,4 +28,20 @@ class RecommendationMapper
         return $recommendation->setQueryToAnswer();
     }
 
+    /**
+     * @throws BindingResolutionException
+     * @throws \Exception
+     */
+    public static function fromArray(array $array, ?int $id = null): Recommendation
+    {
+        $recommendation = new Recommendation(
+            id: $id,
+            query: QueryMapper::fromArray($array),
+            answer: new Answer()
+        );
+
+        return $recommendation->setQueryToAnswer();
+    }
+
+
 }

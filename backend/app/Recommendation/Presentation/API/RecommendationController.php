@@ -54,7 +54,7 @@ class RecommendationController extends Controller
             $attachmentDto = new AttachmentRecommendationDto(
                 jobId: $uuid,
                 userEmail: $request->input('email'),
-                filePath: Storage::disk('public')->url($fileUrl)
+                filePath: Storage::disk('public')->path($fileUrl)
             );
 
             $job = new PerformRecommendationFile($attachmentDto);
