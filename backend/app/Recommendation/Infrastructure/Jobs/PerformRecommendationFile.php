@@ -33,6 +33,6 @@ class PerformRecommendationFile implements ShouldQueue
      */
     public function handle()
     {
-//        (new FileRecommendationParserCommand($this->attachmentRecommendationDto))->execute();
+        (new FileRecommendationParserCommand($this->attachmentRecommendationDto))->execute();
     }
 }
