@@ -42,7 +42,7 @@ class ProviderGPT implements RecommendationProviderInterface
             throw new \DomainException('Invalid response format: content is missing');
         }
 
-        $response = explode('%d%', $response_data['choices'][0]['message']['content']);
+            $response = explode('%d%', $response_data['choices'][0]['message']['content']);
 
         if (count($response) < 2) {
             throw new \DomainException('Invalid response format: expected 2 parts, but received ' . count($response));

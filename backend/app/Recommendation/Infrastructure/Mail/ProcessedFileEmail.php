@@ -34,7 +34,8 @@ class ProcessedFileEmail extends Mailable
     {
 
         return new Envelope(
-            subject: 'Обработанный файл',
+            from: new Address('quadramind@email.com', 'Сервис Smart-рекомендаций'),
+            subject: 'Задание по обработки файла выполнено',
         );
     }
 

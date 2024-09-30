@@ -3,6 +3,7 @@
 namespace App\Recommendation\Infrastructure\Jobs;
 
 use App\Recommendation\Application\DTO\AttachmentRecommendationDto;
+use App\Recommendation\Application\UseCases\Commands\FileRecommendationParserCommand;
 use App\Recommendation\Infrastructure\Mail\ProcessedFileEmail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -22,8 +23,7 @@ class PerformRecommendationFile implements ShouldQueue
      */
     public function __construct(
         private readonly AttachmentRecommendationDto $attachmentRecommendationDto
-    )
-    {
+    ) {
     }
 
     /**
@@ -33,7 +33,6 @@ class PerformRecommendationFile implements ShouldQueue
      */
     public function handle()
     {
-       Mail::to($this->attachmentRecommendationDto->userEmail)
-           ->send(new ProcessedFileEmail($this->attachmentRecommendationDto));
+        (new FileRecommendationParserCommand($this->attachmentRecommendationDto))->execute();
     }
 }

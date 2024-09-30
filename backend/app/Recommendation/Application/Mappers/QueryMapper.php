@@ -25,4 +25,17 @@ class QueryMapper
             deadline: new Deadline($request->input('deadline', ''))
         );
     }
+
+    /**
+     * @throws Exception
+     */
+    public static function fromArray(array $array): Query
+    {
+        return new Query(
+          title: new Title($array['title']),
+          body: new Body($array['body']),
+          project: new Project($array['project'] ?? ''),
+          deadline: new Deadline($array['deadline'] ?? '')
+        );
+    }
 }

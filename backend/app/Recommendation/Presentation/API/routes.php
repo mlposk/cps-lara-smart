@@ -15,26 +15,4 @@ Route::group([
     Route::get("index", [RecommendationController::class, "getAll"])->name("recommendation.index");
     Route::post("file", [RecommendationController::class, "handleFile"])->name("recommendation.file");
     Route::post("text", [RecommendationController::class, "handleText"])->name("recommendation.text");
-
-    Route::post('/email', function (Request $request) {
-        if(!$request->has('file')){
-            return;
-        }
-        $uuid = str()->uuid();
-
-        $file = $request->file('file');
-        $fileResults = Storage::disk('public')->putFileAs('recommendations',
-            $file,
-            $uuid . '.' . $file->extension()
-        );
-
-        $attachmentDto = new AttachmentRecommendationDto(
-            jobId: $uuid,
-            userEmail: 'chedia@mail.ru',
-            filePath: Storage::disk('public')->url($fileResults)
-        );
-
-        $job = new PerformRecommendationFile($attachmentDto);
-        dispatch($job);
-    });
 });
