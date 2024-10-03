@@ -8,10 +8,21 @@ services:
       - "./backend:/var/www/html"
     depends_on:
       - larasmart-fpm
+    x-def-logging: &default-logging
+      logging:
+        driver: "loki"
+        options:
+          loki-url: "http://localhost:3100/loki/api/v1/push"
+          loki-batch-size: "100"
+          loki-retries: 2
+          loki-max-backoff: 1000ms
+          loki-timeout: 1s
+    <<: *default-logging
     networks:
       - larasmart-network
 
   larasmart-fpm:
+    container_name: larasmart-fpm
     build:
       context: .docker/php
     volumes:
@@ -21,6 +32,7 @@ services:
     depends_on:
       larasmart-mysql:
         condition: service_healthy
+    <<: *default-logging
     networks:
       - larasmart-network
 
@@ -39,6 +51,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    <<: *default-logging
     networks:
       - larasmart-network
 
@@ -51,17 +64,20 @@ services:
       - redis-storage:/data
     depends_on:
       - larasmart-fpm
+    <<: *default-logging
     networks:
       - larasmart-network
 
   larasmart-prometheus:
-    image: prom/prometheus
+    build:
+      context: .docker/prometheus
     ports:
       - "9090:9090"
-    depends_on:
-      - larasmart-fpm
     networks:
       - larasmart-network
+    command:
+      - "--config.file=/etc/prometheus/config.yml"
+    restart: unless-stopped
 
   larasmart-grafana:
     image: grafana/grafana
@@ -73,27 +89,28 @@ services:
       - grafana-storage:/var/lib/grafana
     depends_on:
       - larasmart-prometheus
+      - larasmart-loki
     networks:
       - larasmart-network
 
   larasmart-promtail:
-    image: grafana/promtail
     build:
       context: .docker/promtail
     volumes:
       - /var/log:/var/log/host
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
-    depends_on:
-      - larasmart-prometheus
     networks:
       - larasmart-network
 
   larasmart-loki:
-    image: grafana/loki
+    build:
+      context: .docker/loki
     ports:
       - "3100:3100"
     depends_on:
       - larasmart-prometheus
+    command:
+      - "--config.file=/etc/loki/config.yaml"
     networks:
       - larasmart-network
 
