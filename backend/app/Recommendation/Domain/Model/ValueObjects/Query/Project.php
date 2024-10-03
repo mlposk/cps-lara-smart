@@ -14,7 +14,7 @@ class Project
     }
     public function __toString(): string
     {
-        return $this->project;
+        return $this->project ?? "";
     }
 
 }

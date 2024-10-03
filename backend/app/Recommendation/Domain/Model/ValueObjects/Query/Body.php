@@ -12,6 +12,6 @@ class Body
 
     public function __toString(): string
     {
-        return $this->body;
+        return $this->body ?? "";
     }
 }

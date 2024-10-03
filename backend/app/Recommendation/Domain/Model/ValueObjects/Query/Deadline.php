@@ -15,6 +15,6 @@ class Deadline
 
     public function __toString(): string
     {
-        return $this->deadline;
+        return $this->deadline ?? "";
     }
 }
