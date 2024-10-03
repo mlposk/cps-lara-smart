@@ -83,12 +83,14 @@ services:
     image: prom/node-exporter:latest
     ports:
       - "9100:9100"
-    networks:
-      - larasmart-network
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /:/rootfs:ro
+    depends_on:
+      - larasmart-prometheus
+    networks:
+      - larasmart-network
     command:
       - '--path.procfs=/host/proc'
       - '--path.rootfs=/rootfs'
