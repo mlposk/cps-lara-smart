@@ -15,14 +15,12 @@ class RecommendationServiceProvider extends ServiceProvider
 
         $this->app->bind(
             \App\Recommendation\Domain\Contracts\ValueObjects\Expert\RecommendationExpertInterface::class,
-//            \App\Recommendation\Domain\Model\ValueObjects\Expert\ExpertGPT::class,
-            \App\Recommendation\Domain\Model\ValueObjects\Expert\ExpertGigaChat::class,
+            \App\Recommendation\Domain\Model\ValueObjects\Expert\ExpertGPT::class,
         );
 
         $this->app->bind(
             \App\Recommendation\Domain\Contracts\ValueObjects\Provider\RecommendationProviderInterface::class,
-//            \App\Recommendation\Domain\Model\ValueObjects\Provider\ProviderGPT::class,
-            \App\Recommendation\Domain\Model\ValueObjects\Provider\ProviderGigaChat::class,
+            \App\Recommendation\Domain\Model\ValueObjects\Provider\ProviderGPT::class,
         );
     }
 }
