@@ -6,12 +6,12 @@ use Illuminate\Support\ServiceProvider;
 
 class RecommendationServiceProvider extends ServiceProvider
 {
-    public array $providers = [
+    public array $experts = [
         "gpt" => \App\Recommendation\Domain\Model\ValueObjects\Expert\ExpertGPT::class,
         "gigachat" => \App\Recommendation\Domain\Model\ValueObjects\Expert\ExpertGigaChat::class
     ];
 
-    public array $experts = [
+    public array $providers = [
         "gpt" => \App\Recommendation\Domain\Model\ValueObjects\Provider\ProviderGPT::class,
         "gigachat" => \App\Recommendation\Domain\Model\ValueObjects\Provider\ProviderGigaChat::class,
     ];
