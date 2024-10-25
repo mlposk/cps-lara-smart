@@ -13,12 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('recommendations', function (Blueprint $table) {
+        Schema::create('tracker', function (Blueprint $table) {
             $table->id();
-            $table->string('uuid');
-            $table->timestamps();
+            $table->string('targetAgent');
+            $table->string('sourceType');
             $table->string('query');
             $table->string('answer');
+            $table->string('meta');
+            $table->timestamps();
         });
     }
 
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('recommendations');
+        Schema::dropIfExists('tracker');
     }
 };
