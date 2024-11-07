@@ -104,6 +104,10 @@ class Answer extends Entity
     {
         return $this->resultCollection->toArray();
     }
+    public function separateData(): array
+    {
+        return $this->resultCollection->separateData();
+    }
 
     /**
      * @throws Exception

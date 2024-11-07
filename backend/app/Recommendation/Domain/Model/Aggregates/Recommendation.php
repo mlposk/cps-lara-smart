@@ -46,6 +46,10 @@ class Recommendation extends AggregateRoot
     {
        return  $this->answer->toArray();
     }
+    public function getAnswerSeparateDate(): array
+    {
+        return  $this->answer->separateData();
+    }
 
     public function toArray(): array
     {

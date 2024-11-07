@@ -29,7 +29,7 @@ class RecommendationRepository implements RecommendationRepositoryInterface
             $AnswerEloquentModel = AnswerMapper::toEloquent($answer);
             $AnswerEloquentModel->recommendation_id = $recommendationId;
             $AnswerEloquentModel->save();
-        }, $recommendation->getAnswers() );
+        }, $recommendation->getAnswerSeparateDate() );
 
 
         // Публикация событий

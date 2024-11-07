@@ -19,12 +19,21 @@ class QueryResponseCollection
     {
         $this->collection->push($queryResponse);
     }
-    public function toArray(): array
+    public function separateData(): array
     {
          return $this->collection->map(function ($item) {
             return [
                 'query' => $item->query->toArray(),
                 'response' => $item->result->toArray()
+            ];
+        })->all();
+    }
+    public function toArray(): array
+    {
+        return $this->collection->map(function ($item) {
+            return [
+               ...$item->query->toArray(),
+               ...$item->result->toArray()
             ];
         })->all();
     }

@@ -72,13 +72,12 @@ class RecommendationController extends Controller
                 filePath: Storage::disk('public')->path($fileUrl)
             );
 
-            (new FileRecommendationParserCommand($attachmentDto))->execute();
 
-//            $job = new PerformRecommendationFile($attachmentDto);
-//            dispatch($job);
-//
-//            Mail::to($attachmentDto->userEmail)
-//                ->send(new ConfirmEmail($attachmentDto));
+            $job = new PerformRecommendationFile($attachmentDto);
+            dispatch($job);
+
+            Mail::to($attachmentDto->userEmail)
+                ->send(new ConfirmEmail($attachmentDto));
 
         } catch (ValidationException $throwable) {
             return response()->error($throwable->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -94,9 +93,6 @@ class RecommendationController extends Controller
     {
         try {
 
-//            $recommendation = RecommendationEloquentModel::query()->findOrFail(20);
-//            $recommendatio =  RecommendationMapper::fromEloquent($recommendation);
-//            return response()->success($recommendatio->toArray());
 
 
             $recommendation = RecommendationMapper::fromRequest($request);

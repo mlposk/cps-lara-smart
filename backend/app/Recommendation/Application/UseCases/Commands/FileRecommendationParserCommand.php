@@ -41,7 +41,6 @@ class FileRecommendationParserCommand
             if ($row = CsvFileParser::parseNextRow()) {
                 $rows[] = $row;
             } else {
-                $this->csvFileComposer->closeWriter();
                 break;
             }
         }
@@ -53,15 +52,14 @@ class FileRecommendationParserCommand
 
         $recommendation->getRecommendation();
 
-         $domainRecommendation = $this->repository->store($recommendation);
+        $answersArray = $recommendation->getAnswers();
 
-         $answersArray = $recommendation->getAnswers();
+        foreach ($answersArray as $item){
+            $this->csvFileComposer->addRow($item);
+        }
 
-        // $row = array_merge($row, $recommendation->toArray()['answer']);
-
-
-        $this->csvFileComposer->addRow($row);
-
+        $this->csvFileComposer->closeWriter();
+        $this->repository->store($recommendation);
         $this->sendMail();
     }
 
@@ -72,6 +70,7 @@ class FileRecommendationParserCommand
     private function initCsvFileComposer(): void
     {
         $fileName = $this->attachmentRecommendationDto->jobId . '_converted.csv';
+        // Сохраняем
         $filePath = Storage::disk('public')->path('recommendations/' . $fileName);
 
         $this->attachmentDto = new AttachmentRecommendationDto(

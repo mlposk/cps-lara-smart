@@ -35,7 +35,7 @@ class ProviderGPT implements RecommendationProviderInterface
      * @throws \DomainException
      * @throws \Exception
      */
-    public function getSuggestion($query): Result
+    public function getSuggestion($query): ProviderResponse
     {
         $response_data = $this->getResult($query);
 
@@ -49,7 +49,7 @@ class ProviderGPT implements RecommendationProviderInterface
             throw new \DomainException('Invalid response format: expected 2 parts, but received ' . count($response));
         }
 
-        return new Result(new SmartTitle($response[0]), new Recommendation($response[1]));
+        return new ProviderResponse(new SmartTitle($response[0]), new Recommendation($response[1]));
     }
 
     /**
