@@ -6,7 +6,7 @@ namespace App\Recommendation\Domain\Model\ValueObjects\Query;
 use App\Common\Domain\ValueObject;
 use Exception;
 
-class Query extends ValueObject
+class Query
 {
     /**
      * @throws Exception
@@ -19,7 +19,7 @@ class Query extends ValueObject
     ) {
     }
 
-    public function toArray(): array
+    public function toArray() :array
     {
         return [
             'title' => (string)$this->title,

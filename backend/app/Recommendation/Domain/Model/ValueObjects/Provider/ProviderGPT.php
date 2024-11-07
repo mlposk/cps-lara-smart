@@ -33,6 +33,7 @@ class ProviderGPT implements RecommendationProviderInterface
 
     /**
      * @throws \DomainException
+     * @throws \Exception
      */
     public function getSuggestion($query): Result
     {

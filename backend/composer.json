@@ -62,7 +62,8 @@
         "platform": {
             "ext-pcntl": "7.4",
             "ext-posix": "7.4"
-        }
+        },
+        "platform-check": false
     },
     "minimum-stability": "dev",
     "prefer-stable": true

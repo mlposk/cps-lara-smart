@@ -1,16 +1,13 @@
 <?php
 
-namespace App\Recommendation\Infrastructure\Events;
+namespace App\Recommendation\Domain\Events;
 
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class TrackedEvent
+class RecommendationCompete
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -19,9 +16,15 @@ class TrackedEvent
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct(
+        private readonly int $id,
+        private readonly array $query,
+        private readonly array $answer,
+        private readonly string $source,
+        private readonly string $sourceValue,
 
+    ) {
+        $rr = '';
     }
 
     /**

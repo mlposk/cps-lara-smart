@@ -6,6 +6,7 @@ use App\Recommendation\Application\DTO\AttachmentRecommendationDto;
 use App\Recommendation\Application\UseCases\Commands\FileRecommendationParserCommand;
 use App\Recommendation\Infrastructure\Mail\ProcessedFileEmail;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -30,6 +31,7 @@ class PerformRecommendationFile implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @throws BindingResolutionException
      */
     public function handle()
     {

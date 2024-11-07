@@ -4,9 +4,11 @@ namespace App\Recommendation\Application\UseCases\Commands;
 
 use App\Recommendation\Application\DTO\AttachmentRecommendationDto;
 use App\Recommendation\Application\Mappers\RecommendationMapper;
+use App\Recommendation\Domain\Contracts\Repositories\RecommendationRepositoryInterface;
 use App\Recommendation\Infrastructure\Mail\ProcessedFileEmail;
 use App\Recommendation\Infrastructure\Parsers\CsvFileParser;
 use App\Recommendation\Infrastructure\Composers\CsvFileComposer;
+use Box\Spout\Common\Exception\IOException;
 use Box\Spout\Writer\Exception\WriterNotOpenedException;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Mail;
@@ -15,37 +17,57 @@ use Illuminate\Support\Facades\Storage;
 class FileRecommendationParserCommand
 {
     private CsvFileComposer $csvFileComposer;
-
+    private RecommendationRepositoryInterface $repository;
     private AttachmentRecommendationDto $attachmentDto;
-
-    public function __construct(private readonly AttachmentRecommendationDto $attachmentRecommendationDto)
-    {
-    }
 
     /**
      * @throws BindingResolutionException
      */
+    public function __construct(
+        private readonly AttachmentRecommendationDto $attachmentRecommendationDto
+    ) {
+        $this->repository = app()->make(RecommendationRepositoryInterface::class);
+    }
+
+    /**
+     * @throws BindingResolutionException
+     * @throws \Exception
+     */
     public function execute(): void
     {
         $this->initCsvFileComposer();
-
+        $rows = [];
         while (true) {
             if ($row = CsvFileParser::parseNextRow()) {
-                $recommendation = RecommendationMapper::fromArray($row);
-                $recommendation->execute();
-                $row = array_merge($row, $recommendation->toArray()['answer']);
-                $this->csvFileComposer->addRow($row);
+                $rows[] = $row;
             } else {
                 $this->csvFileComposer->closeWriter();
                 break;
             }
         }
 
+        $recommendation = RecommendationMapper::fromArray(
+            $rows,
+            ['source' => 'email', 'value' => $this->attachmentRecommendationDto->userEmail]
+        );
+
+        $recommendation->getRecommendation();
+
+         $domainRecommendation = $this->repository->store($recommendation);
+
+         $answersArray = $recommendation->getAnswers();
+
+        // $row = array_merge($row, $recommendation->toArray()['answer']);
+
+
+        $this->csvFileComposer->addRow($row);
+
         $this->sendMail();
     }
 
     /**
      * @throws WriterNotOpenedException
+     * @throws IOException
      */
     private function initCsvFileComposer(): void
     {

@@ -3,39 +3,71 @@
 namespace App\Recommendation\Domain\Model\Aggregates;
 
 use App\Common\Domain\AggregateRoot;
-use App\Recommendation\Domain\Contracts\ValueObjects\Expert\RecommendationExpertInterface;
-use App\Recommendation\Domain\Contracts\ValueObjects\Provider\RecommendationProviderInterface;
+use App\Recommendation\Domain\Events\RecommendationCompete;
 use App\Recommendation\Domain\Model\Entities\Answer;
+use App\Recommendation\Domain\Model\Entities\ContactSource;
+use App\Recommendation\Domain\Model\ValueObjects\Query\Body;
+use App\Recommendation\Domain\Model\ValueObjects\Query\Deadline;
+use App\Recommendation\Domain\Model\ValueObjects\Query\Project;
 use App\Recommendation\Domain\Model\ValueObjects\Query\Query;
-use Illuminate\Contracts\Container\BindingResolutionException;
+use App\Recommendation\Domain\Model\ValueObjects\Query\QueryCollection;
+
+use App\Recommendation\Domain\Model\ValueObjects\Query\Title;
+use Exception;
+use Illuminate\Http\Request;
+
 
 class Recommendation extends AggregateRoot
 {
 
+    private array $events = [];
+    private Answer $answer;
     public function __construct(
         public ?int $id,
-        public Query $query,
-        public Answer $answer
+        public string $source,
+        public string $sourceValue,
     ) {
     }
 
-    public function setQueryToAnswer(): self
+    public function addAnswer(Answer $answer): void
     {
-        $this->answer->setQuery($this->query);
-        return $this;
+        $this->answer = $answer;
     }
 
-    public function execute(): void
+    /**
+     * @throws Exception
+     */
+    public function getRecommendation(): void
     {
         $this->answer->execute();
+    }
 
+    public function getAnswers(): array
+    {
+       return  $this->answer->toArray();
     }
 
     public function toArray(): array
     {
         return [
-            'query' => $this->query->toArray(),
-            'answer' => $this->answer->toArray()
+            'answer' => $this->answer->toArray(),
+            'source' => $this->source,
+            'sourceValue' => $this->sourceValue,
+            'id' => $this->id
         ];
+    }
+
+    private function throwCompleteEvent(): RecommendationCompete
+    {
+        ['id' => $id, 'query' => $query, 'answer' => $answer, 'source' => $source, 'sourceValue' => $sourceValue] = $this->toArray();
+       return new RecommendationCompete($id, $query, $answer, $source, $sourceValue);
+    }
+
+    public function clearEvents(): void {
+        $this->events = [];
+    }
+
+    public function getEvents(): array {
+        return $this->events;
     }
 }
