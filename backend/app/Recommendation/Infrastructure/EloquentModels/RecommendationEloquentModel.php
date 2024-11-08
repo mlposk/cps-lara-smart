@@ -3,9 +3,12 @@
 namespace App\Recommendation\Infrastructure\EloquentModels;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * @property int|null $id
+ * @property string| $uuid
  * @property string $query
  * @property string|null $answer
  */
@@ -21,7 +24,9 @@ class RecommendationEloquentModel extends Model
      */
     protected $fillable = [
         'query',
-        'answer'
+        'uuid',
+        'answer',
+        'uuid'
     ];
 
     /**
@@ -33,5 +38,11 @@ class RecommendationEloquentModel extends Model
         'created_at',
         'updated_at',
     ];
+
+    // Связь с сессией
+    public function answers(): HasMany
+    {
+        return $this->hasMany(AnswerEloquentModel::class, 'recommendation_id');
+    }
 
 }

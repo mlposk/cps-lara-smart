@@ -81,7 +81,7 @@ class CsvFileParser
             $fileContent = mb_convert_encoding($fileContent, 'UTF-8', 'Windows-1251');
             file_put_contents(self::$filePath, $fileContent);
         }
-        if ($fileExtension === 'csv') {
+        if ($fileExtension === 'csv' || $fileExtension === 'tmp') {
             self::$reader = ReaderEntityFactory::createCSVReader();
             self::$reader->setFieldDelimiter(';');
             self::$reader->setFieldEnclosure('"');

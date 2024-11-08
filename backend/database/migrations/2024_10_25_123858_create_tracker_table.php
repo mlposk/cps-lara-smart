@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 
 return new class extends Migration
 {
@@ -14,12 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('recommendations', function (Blueprint $table) {
+        Schema::create('tracker', function (Blueprint $table) {
             $table->id();
-            $table->string('uuid');
+            $table->string('targetAgent');
+            $table->string('sourceType');
+            $table->string('query');
+            $table->string('answer');
+            $table->string('meta');
             $table->timestamps();
-            $table->string('source');
-            $table->string('source_value');
         });
     }
 
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('recommendations');
+        Schema::dropIfExists('tracker');
     }
 };

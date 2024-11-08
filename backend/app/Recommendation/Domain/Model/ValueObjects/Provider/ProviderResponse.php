@@ -5,7 +5,7 @@ namespace App\Recommendation\Domain\Model\ValueObjects\Provider;
 use App\Common\Domain\ValueObject;
 use Exception;
 
-class Result extends ValueObject{
+class ProviderResponse extends ValueObject{
 
     /**
      * @throws Exception

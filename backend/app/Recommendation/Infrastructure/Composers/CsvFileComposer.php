@@ -31,6 +31,9 @@ class CsvFileComposer
      */
     private string $fileUrl;
 
+    /**
+     * @throws IOException
+     */
     public function __construct(array $columns = [], string $fileUrl)
     {
         $this->columns = $columns;
@@ -43,6 +46,7 @@ class CsvFileComposer
      * Initialize the CSV writer
      *
      * @return void
+     * @throws IOException
      */
     private function initCsvWriter(): void
     {
@@ -57,6 +61,7 @@ class CsvFileComposer
      * @param array $rowData
      * @return void
      * @throws WriterNotOpenedException
+     * @throws IOException
      */
     public function addRow(array $rowData): void
     {
