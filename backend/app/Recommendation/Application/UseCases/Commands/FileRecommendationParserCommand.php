@@ -20,7 +20,6 @@ class FileRecommendationParserCommand
 {
     private CsvFileComposer $csvFileComposer;
     private RecommendationRepositoryInterface $repository;
-    private AttachmentRecommendationDto $attachmentDto;
     private array $payload;
     private ?array $columns;
 
@@ -36,10 +35,10 @@ class FileRecommendationParserCommand
 
     private function initPayload(): void
     {
-        $filerPath = $this->attachmentRecommendationDto->file->getPathName();
+        $filerPath = $this->attachmentRecommendationDto->filePath;
         $columns = CsvFileParser::parseNextRow($filerPath);
 
-        if (!$columns || !array_diff($columns, ['title', 'body', 'project', 'smartTitle', 'recommendation'])) {
+        if (!$columns || array_diff($columns, ['title', 'body', 'project', 'smartTitle', 'recommendation'])) {
             throw new \InvalidArgumentException('invalid fields');
         }
         $this->columns = $columns;
@@ -101,8 +100,8 @@ class FileRecommendationParserCommand
 
     private function sendMail(): void
     {
-        Mail::to($this->attachmentDto->userEmail)
-            ->send(new ProcessedFileEmail($this->attachmentDto));
+        Mail::to($this->attachmentRecommendationDto->userEmail)
+            ->send(new ProcessedFileEmail($this->attachmentRecommendationDto));
     }
 
 }
