@@ -25,12 +25,11 @@ class RecommendationRepository implements RecommendationRepositoryInterface
         $recommendationEloquent->save();
         $recommendationId = $recommendationEloquent->id;
 
-        array_map(function ($answer) use ($recommendationId) {
-            $AnswerEloquentModel = AnswerMapper::toEloquent($answer);
-            $AnswerEloquentModel->recommendation_id = $recommendationId;
-            $AnswerEloquentModel->save();
-        }, $recommendation->getAnswerSeparateDate() );
-
+        foreach ($recommendation->getAnswersAssocArray() as $answer){
+            $answerEloquentModel = AnswerMapper::toEloquent($answer);
+            $answerEloquentModel->recommendation_id = $recommendationId;
+            $answerEloquentModel->save();
+        }
 
         // Публикация событий
         foreach ($recommendation->getEvents() as $event) {
@@ -39,7 +38,6 @@ class RecommendationRepository implements RecommendationRepositoryInterface
 
         // Очищаем события после публикации
         $recommendation->clearEvents();
-
 
 
         return RecommendationMapper::fromEloquent($recommendationEloquent);

@@ -24,6 +24,7 @@ class RecommendationEloquentModel extends Model
      */
     protected $fillable = [
         'query',
+        'uuid',
         'answer',
         'uuid'
     ];

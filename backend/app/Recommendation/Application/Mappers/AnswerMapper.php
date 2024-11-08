@@ -32,10 +32,10 @@ class AnswerMapper
     {
         $model = new Answer();
 
-        foreach ($collection as $queryResponse) {
+        foreach ($collection as $element) {
 
-            $query = json_decode($queryResponse->query, true);
-            $response = json_decode($queryResponse->answer, true);
+            $query = json_decode($element->query, true);
+            $response = json_decode($element->answer, true);
 
             $queryObject = QueryMapper::fromArray($query);
             $responseObject = new ProviderResponse(
@@ -86,10 +86,10 @@ class AnswerMapper
 
     public static function toEloquent($answer): AnswerEloquentModel
     {
-        $companyEloquent = new AnswerEloquentModel();
-        $companyEloquent->query = json_encode($answer['query']);
-        $companyEloquent->answer = json_encode($answer['response']);
-        return $companyEloquent;
+        $eloquentModel = new AnswerEloquentModel();
+        $eloquentModel->query = json_encode($answer['query']);
+        $eloquentModel->answer = json_encode($answer['response']);
+        return $eloquentModel;
     }
 
 }

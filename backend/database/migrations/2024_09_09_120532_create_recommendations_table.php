@@ -16,6 +16,7 @@ return new class extends Migration
     {
         Schema::create('recommendations', function (Blueprint $table) {
             $table->id();
+            $table->string('uuid');
             $table->timestamps();
             $table->string('source');
             $table->string('source_value');

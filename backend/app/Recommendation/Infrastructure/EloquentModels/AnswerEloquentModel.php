@@ -30,11 +30,4 @@ class AnswerEloquentModel extends Model
         'created_at',
         'updated_at',
     ];
-
-
-    function toArray(): array
-
-    {
-        return [];
-    }
 }

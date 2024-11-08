@@ -14,6 +14,7 @@ use App\Recommendation\Domain\Model\ValueObjects\Query\Title;
 use App\Recommendation\Infrastructure\EloquentModels\RecommendationEloquentModel;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 
 class RecommendationMapper
@@ -24,9 +25,9 @@ class RecommendationMapper
      */
     public static function fromEloquent(RecommendationEloquentModel $recommendationEloquentModel): Recommendation
     {
-
-        $recommendation =  new Recommendation(
+        $recommendation = new Recommendation(
             id: $recommendationEloquentModel->id,
+            uuid: $recommendationEloquentModel->uuid,
             source: $recommendationEloquentModel->source,
             sourceValue: $recommendationEloquentModel->source_value,
         );
@@ -45,6 +46,7 @@ class RecommendationMapper
             $companyEloquent = RecommendationEloquentModel::query()->findOrFail($recommendation->id);
         }
 
+        $companyEloquent->uuid = $recommendation->uuid;
         $companyEloquent->source = $recommendation->source;
         $companyEloquent->source_value = $recommendation->sourceValue;
 
@@ -57,7 +59,6 @@ class RecommendationMapper
      */
     public static function fromRequest(Request $request): Recommendation
     {
-
         $answer = new Answer();
 
         $query = new Query(
@@ -69,8 +70,9 @@ class RecommendationMapper
         $answer->addQuery($query);
 
 
-        $recommendation =  new Recommendation(
+        $recommendation = new Recommendation(
             id: null,
+            uuid: Str::uuid(),
             source: Source::HTTP,
             sourceValue: new Value($request->ip()),
         );
@@ -84,16 +86,21 @@ class RecommendationMapper
      * @throws BindingResolutionException
      * @throws \Exception
      */
-    public static function fromArray(array $array, array $contactSource): Recommendation
+    public static function fromArrayWithAnswer(array $array, array $contactSource): Recommendation
     {
-        $recommendation = new Recommendation(
-            id: null,
-            source: $contactSource['source'],
-            sourceValue: $contactSource['value'],
-        );
+        $recommendation = static::fromArray($array, $contactSource);
         $recommendation->addAnswer(AnswerMapper::fromArray($array));
         return $recommendation;
     }
 
+    public static function fromArray(array $contactSource): Recommendation
+    {
+        return new Recommendation(
+            id: null,
+            uuid: Str::uuid(),
+            source: $contactSource['source'],
+            sourceValue: $contactSource['sourceValue'],
+        );
+    }
 
 }

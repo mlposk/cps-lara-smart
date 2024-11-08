@@ -7,18 +7,17 @@ use App\Recommendation\Domain\Contracts\ValueObjects\Expert\RecommendationExpert
 use App\Recommendation\Domain\Contracts\ValueObjects\Provider\RecommendationProviderInterface;
 use App\Recommendation\Domain\Model\ValueObjects\Provider\ProviderResponse;
 use App\Recommendation\Domain\Model\ValueObjects\Provider\Recommendation;
-use App\Recommendation\Domain\Model\ValueObjects\Provider\Result;
+
 use App\Recommendation\Domain\Model\ValueObjects\Provider\SmartTitle;
 use App\Recommendation\Domain\Model\ValueObjects\Query\Query;
-use App\Recommendation\Domain\Model\ValueObjects\Expert\ExpertGPT;
-use App\Recommendation\Domain\Model\ValueObjects\Provider\ProviderGPT;
+
 use App\Recommendation\Domain\Model\ValueObjects\Query\QueryCollection;
 use App\Recommendation\Domain\Model\ValueObjects\QueryResponse\QueryResponse;
 use App\Recommendation\Domain\Model\ValueObjects\QueryResponse\QueryResponseCollection;
 use Exception;
 use Faker\Factory;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Support\Collection;
+
 
 class Answer extends Entity
 {
@@ -26,7 +25,7 @@ class Answer extends Entity
     private QueryCollection $queries;
     private RecommendationExpertInterface $expert;
     private RecommendationProviderInterface $provider;
-    private QueryResponseCollection $resultCollection;
+    private QueryResponseCollection $queryResponses;
 
     /**
      * @throws BindingResolutionException
@@ -44,7 +43,7 @@ class Answer extends Entity
     {
         $this->initExpert();
         $this->initProvider();
-        $this->resultCollection();
+        $this->queryResponseCollection();
         $this->initQueryCollection();
     }
 
@@ -94,7 +93,7 @@ class Answer extends Entity
     }
     public function addQueryResponse(QueryResponse $queryResponse): void
     {
-        $this->resultCollection->push(
+        $this->queryResponses ->push(
             $queryResponse
         );
     }
@@ -102,11 +101,11 @@ class Answer extends Entity
 
     public function toArray(): array
     {
-        return $this->resultCollection->toArray();
+        return $this->queryResponses ->toArray();
     }
-    public function separateData(): array
+    public function toAssocArray(): array
     {
-        return $this->resultCollection->separateData();
+        return $this->queryResponses ->toAssocArray();
     }
 
     /**
@@ -122,9 +121,9 @@ class Answer extends Entity
         );
     }
 
-    private function resultCollection(): void
+    private function queryResponseCollection(): void
     {
-        $this->resultCollection = new QueryResponseCollection();
+        $this->queryResponses  = new QueryResponseCollection();
     }
 
     private function initQueryCollection(): void

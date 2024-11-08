@@ -19,7 +19,7 @@ class QueryResponseCollection
     {
         $this->collection->push($queryResponse);
     }
-    public function separateData(): array
+    public function toAssocArray(): array
     {
          return $this->collection->map(function ($item) {
             return [
@@ -37,4 +37,7 @@ class QueryResponseCollection
             ];
         })->all();
     }
+
+
+
 }

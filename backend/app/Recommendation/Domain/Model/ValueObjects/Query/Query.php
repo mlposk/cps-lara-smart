@@ -6,7 +6,7 @@ namespace App\Recommendation\Domain\Model\ValueObjects\Query;
 use App\Common\Domain\ValueObject;
 use Exception;
 
-class Query
+class Query extends ValueObject
 {
     /**
      * @throws Exception

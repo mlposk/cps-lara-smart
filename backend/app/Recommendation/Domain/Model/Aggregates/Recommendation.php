@@ -3,18 +3,11 @@
 namespace App\Recommendation\Domain\Model\Aggregates;
 
 use App\Common\Domain\AggregateRoot;
-use App\Recommendation\Domain\Events\RecommendationCompete;
+use App\Recommendation\Domain\Events\RecommendationComplete;
 use App\Recommendation\Domain\Model\Entities\Answer;
-use App\Recommendation\Domain\Model\Entities\ContactSource;
-use App\Recommendation\Domain\Model\ValueObjects\Query\Body;
-use App\Recommendation\Domain\Model\ValueObjects\Query\Deadline;
-use App\Recommendation\Domain\Model\ValueObjects\Query\Project;
-use App\Recommendation\Domain\Model\ValueObjects\Query\Query;
-use App\Recommendation\Domain\Model\ValueObjects\Query\QueryCollection;
 
-use App\Recommendation\Domain\Model\ValueObjects\Query\Title;
 use Exception;
-use Illuminate\Http\Request;
+
 
 
 class Recommendation extends AggregateRoot
@@ -24,6 +17,7 @@ class Recommendation extends AggregateRoot
     private Answer $answer;
     public function __construct(
         public ?int $id,
+        public string $uuid,
         public string $source,
         public string $sourceValue,
     ) {
@@ -37,7 +31,7 @@ class Recommendation extends AggregateRoot
     /**
      * @throws Exception
      */
-    public function getRecommendation(): void
+    public function executeAnswer(): void
     {
         $this->answer->execute();
     }
@@ -46,9 +40,9 @@ class Recommendation extends AggregateRoot
     {
        return  $this->answer->toArray();
     }
-    public function getAnswerSeparateDate(): array
+    public function getAnswersAssocArray(): array
     {
-        return  $this->answer->separateData();
+        return  $this->answer->toAssocArray();
     }
 
     public function toArray(): array
@@ -56,15 +50,16 @@ class Recommendation extends AggregateRoot
         return [
             'answer' => $this->answer->toArray(),
             'source' => $this->source,
+            'uuid' => $this->uuid,
             'sourceValue' => $this->sourceValue,
             'id' => $this->id
         ];
     }
 
-    private function throwCompleteEvent(): RecommendationCompete
+    private function throwCompleteEvent(): RecommendationComplete
     {
         ['id' => $id, 'query' => $query, 'answer' => $answer, 'source' => $source, 'sourceValue' => $sourceValue] = $this->toArray();
-       return new RecommendationCompete($id, $query, $answer, $source, $sourceValue);
+       return new RecommendationComplete($id, $query, $answer, $source, $sourceValue);
     }
 
     public function clearEvents(): void {
