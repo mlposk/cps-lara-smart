@@ -26,7 +26,7 @@ class StoreRecommendationEntryCommand
      */
     public function execute()
     {
-        $this->recommendation->getRecommendation();
+        $this->recommendation->executeAnswer();
 
         return $this->repository->store($this->recommendation);
     }
