@@ -51,7 +51,7 @@ class RecommendationController extends Controller
 
             $attachmentDto = new AttachmentRecommendationDto(
                 userEmail: $request->input('email'),
-                file: $request->file('file'),
+                filePath: $request->file('file')->getPathName(),
                 jobId: $recommendation->uuid
             );
 
