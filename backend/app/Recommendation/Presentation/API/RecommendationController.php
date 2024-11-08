@@ -15,6 +15,7 @@ use App\Common\Infrastructure\Laravel\Controllers\Controller;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -48,10 +49,16 @@ class RecommendationController extends Controller
                 'sourceValue' => $request->input('email')
             ]);
 
+            $file = $request->file('file');
+            $fileUrl = Storage::disk('public')->putFileAs(
+                'recommendations',
+                $file,
+                $recommendation->uuid . '.' . $file->getClientOriginalExtension()
+            );
 
             $attachmentDto = new AttachmentRecommendationDto(
                 userEmail: $request->input('email'),
-                filePath: $request->file('file')->getPathName(),
+                filePath:  Storage::disk('public')->path($fileUrl),
                 jobId: $recommendation->uuid
             );
 
