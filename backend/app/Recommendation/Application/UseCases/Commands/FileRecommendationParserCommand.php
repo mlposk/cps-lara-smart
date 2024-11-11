@@ -27,7 +27,7 @@ class FileRecommendationParserCommand
      * @throws BindingResolutionException
      */
     public function __construct(
-        private readonly AttachmentRecommendationDto $attachmentRecommendationDto,
+        private AttachmentRecommendationDto $attachmentRecommendationDto,
         private readonly Recommendation $recommendation
     ) {
         $this->repository = app()->make(RecommendationRepositoryInterface::class);
@@ -77,9 +77,19 @@ class FileRecommendationParserCommand
             $this->csvFileComposer->addRow($item);
         }
         $this->csvFileComposer->closeWriter();
+
+        $this->reBuildDto($filePath);
+
     }
 
-
+    private function reBuildDto($filePath): void
+    {
+        $this->attachmentRecommendationDto = new AttachmentRecommendationDto(
+            $this->attachmentRecommendationDto->userEmail,
+            $filePath,
+            $this->attachmentRecommendationDto->jobId
+        );
+    }
 
 
     /**
@@ -103,5 +113,7 @@ class FileRecommendationParserCommand
         Mail::to($this->attachmentRecommendationDto->userEmail)
             ->send(new ProcessedFileEmail($this->attachmentRecommendationDto));
     }
+
+
 
 }
