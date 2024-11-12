@@ -38,9 +38,14 @@ class FileRecommendationParserCommand
         $filerPath = $this->attachmentRecommendationDto->filePath;
         $columns = CsvFileParser::parseNextRow($filerPath);
 
-        if (!$columns || array_diff($columns, ['title', 'body', 'project', 'smartTitle', 'recommendation'])) {
-            throw new \InvalidArgumentException('invalid fields');
+
+        if (!$columns) {
+            throw new \InvalidArgumentException('Empty fields');
         }
+        if (array_diff($columns, ['title', 'body', 'project', 'smartTitle', 'recommendation'])) {
+            throw new \InvalidArgumentException('invalid fields: ' . implode(',', $columns));
+        }
+
         $this->columns = $columns;
 
         while (true) {
@@ -61,8 +66,8 @@ class FileRecommendationParserCommand
         $answers = AnswerMapper::fromArray($this->payload);
         $this->recommendation->addAnswer($answers);
         $this->recommendation->executeAnswer();
-
     }
+
     /**
      * @throws IOException
      * @throws WriterNotOpenedException
@@ -79,7 +84,6 @@ class FileRecommendationParserCommand
         $this->csvFileComposer->closeWriter();
 
         $this->reBuildDto($filePath);
-
     }
 
     private function reBuildDto($filePath): void
@@ -107,13 +111,11 @@ class FileRecommendationParserCommand
     }
 
 
-
     private function sendMail(): void
     {
         Mail::to($this->attachmentRecommendationDto->userEmail)
             ->send(new ProcessedFileEmail($this->attachmentRecommendationDto));
     }
-
 
 
 }
