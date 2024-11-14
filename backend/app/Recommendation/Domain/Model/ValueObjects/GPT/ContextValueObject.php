@@ -1,17 +1,16 @@
 <?php
 
-
 namespace App\Recommendation\Domain\Model\ValueObjects\GPT;
-
 
 class ContextValueObject
 {
     private array $context = [
         [
             'role' => 'system',
-            'content' => 'You are a helpful assistant.'
-        ]
+            'content' => 'You are a helpful assistant.',
+        ],
     ];
+
     private bool $isContextNeeded;
 
     public function __construct(bool $isContextNeeded = true)
@@ -38,13 +37,13 @@ class ContextValueObject
                 Проект: "Кабинет ГД Томск".
                 Верни следующее:
                 {Только название задачи по SMART без вводного слова} {символ %d%} {Почему она не попадает под SMART, распиши критерии, но не пиши про Time Bound}
-                '
+                ',
                 ];
             $this->context[] =
                 [
                     'role' => 'assistant',
                     'content' => 'КР Томск: Реализация функционала выгрузки списка подробного чек-листа
-             загруженных отчетов с учетом фильтров и сортировок в xlsx-файл в административном модуле. %d% Это название уточняет, что нужно сделать, как измерить успех (функционал выгрузки данных) и для какого проекта это делается.'
+             загруженных отчетов с учетом фильтров и сортировок в xlsx-файл в административном модуле. %d% Это название уточняет, что нужно сделать, как измерить успех (функционал выгрузки данных) и для какого проекта это делается.',
                 ];
         }
     }

@@ -3,11 +3,11 @@
 namespace App\Recommendation\Domain\Model\ValueObjects\Provider;
 
 use App\Recommendation\Domain\Contracts\ValueObjects\Provider\RecommendationProviderInterface;
-use App\Recommendation\Domain\Model\ValueObjects\Provider\Result;
 
 class ProviderGPT implements RecommendationProviderInterface
 {
     private string $apiKey;
+
     private string $apiUrl;
 
     public function __construct()
@@ -39,14 +39,14 @@ class ProviderGPT implements RecommendationProviderInterface
     {
         $response_data = $this->getResult($query);
 
-        if (!isset($response_data['choices'][0]['message']['content'])) {
+        if (! isset($response_data['choices'][0]['message']['content'])) {
             throw new \DomainException('Invalid response format: content is missing');
         }
 
-            $response = explode('%d%', $response_data['choices'][0]['message']['content']);
+        $response = explode('%d%', $response_data['choices'][0]['message']['content']);
 
         if (count($response) < 2) {
-            throw new \DomainException('Invalid response format: expected 2 parts, but received ' . count($response));
+            throw new \DomainException('Invalid response format: expected 2 parts, but received '.count($response));
         }
 
         return new ProviderResponse(new SmartTitle($response[0]), new Recommendation($response[1]));
@@ -82,7 +82,7 @@ class ProviderGPT implements RecommendationProviderInterface
     {
         return [
             'Content-Type: application/json',
-            'Authorization: Bearer ' . $this->apiKey,
+            'Authorization: Bearer '.$this->apiKey,
         ];
     }
 }

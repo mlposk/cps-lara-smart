@@ -2,17 +2,13 @@
 
 namespace App\Recommendation\Domain\Model\ValueObjects\Query;
 
-
 use App\Common\Domain\ValueObject;
-use App\Recommendation\Domain\Model\ValueObjects\QueryResponse\QueryResponse;
 use Exception;
 use Illuminate\Support\Collection;
 
 class QueryCollection extends ValueObject
 {
-
     public Collection $collection;
-
 
     /**
      * @throws Exception
@@ -30,8 +26,6 @@ class QueryCollection extends ValueObject
 
     public function toArray(): array
     {
-        return $this->collection->map(fn($item) => $item->toArray())->all();
+        return $this->collection->map(fn ($item) => $item->toArray())->all();
     }
-
-
 }

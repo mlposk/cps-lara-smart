@@ -16,8 +16,7 @@ class StoreRecommendationEntryCommand
      */
     public function __construct(
         private readonly Recommendation $recommendation
-    )
-    {
+    ) {
         $this->repository = app()->make(RecommendationRepositoryInterface::class);
     }
 

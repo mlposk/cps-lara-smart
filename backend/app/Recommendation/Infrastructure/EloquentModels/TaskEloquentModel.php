@@ -17,7 +17,7 @@ class TaskEloquentModel extends Model
         'response',
         'query',
         'model',
-        'source'
+        'source',
     ];
 
     /**
@@ -29,5 +29,4 @@ class TaskEloquentModel extends Model
         'created_at',
         'updated_at',
     ];
-
 }

@@ -7,10 +7,8 @@ use App\Recommendation\Domain\Contracts\ValueObjects\Expert\RecommendationExpert
 use App\Recommendation\Domain\Contracts\ValueObjects\Provider\RecommendationProviderInterface;
 use App\Recommendation\Domain\Model\ValueObjects\Provider\ProviderResponse;
 use App\Recommendation\Domain\Model\ValueObjects\Provider\Recommendation;
-
 use App\Recommendation\Domain\Model\ValueObjects\Provider\SmartTitle;
 use App\Recommendation\Domain\Model\ValueObjects\Query\Query;
-
 use App\Recommendation\Domain\Model\ValueObjects\Query\QueryCollection;
 use App\Recommendation\Domain\Model\ValueObjects\QueryResponse\QueryResponse;
 use App\Recommendation\Domain\Model\ValueObjects\QueryResponse\QueryResponseCollection;
@@ -18,13 +16,14 @@ use Exception;
 use Faker\Factory;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
-
 class Answer extends Entity
 {
-
     private QueryCollection $queries;
+
     private RecommendationExpertInterface $expert;
+
     private RecommendationProviderInterface $provider;
+
     private QueryResponseCollection $queryResponses;
 
     /**
@@ -34,7 +33,6 @@ class Answer extends Entity
     {
         $this->init();
     }
-
 
     /**
      * @throws BindingResolutionException
@@ -60,7 +58,7 @@ class Answer extends Entity
      */
     private function initProvider(): void
     {
-        $this->provider = app()->make(RecommendationProviderInterface::class);;
+        $this->provider = app()->make(RecommendationProviderInterface::class);
     }
 
     /**
@@ -84,28 +82,29 @@ class Answer extends Entity
             $this->addQueryResponse(
                 $queryResponse
             );
-        };
+        }
     }
 
     public function addQuery(Query $query): void
     {
         $this->queries->push($query);
     }
+
     public function addQueryResponse(QueryResponse $queryResponse): void
     {
-        $this->queryResponses ->push(
+        $this->queryResponses->push(
             $queryResponse
         );
     }
 
-
     public function toArray(): array
     {
-        return $this->queryResponses ->toArray();
+        return $this->queryResponses->toArray();
     }
+
     public function toAssocArray(): array
     {
-        return $this->queryResponses ->toAssocArray();
+        return $this->queryResponses->toAssocArray();
     }
 
     /**
@@ -123,12 +122,11 @@ class Answer extends Entity
 
     private function queryResponseCollection(): void
     {
-        $this->queryResponses  = new QueryResponseCollection();
+        $this->queryResponses = new QueryResponseCollection;
     }
 
     private function initQueryCollection(): void
     {
-        $this->queries = new QueryCollection();
+        $this->queries = new QueryCollection;
     }
-
 }

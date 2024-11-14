@@ -5,23 +5,20 @@ namespace App\Recommendation\Domain\Model\Aggregates;
 use App\Common\Domain\AggregateRoot;
 use App\Recommendation\Domain\Events\RecommendationComplete;
 use App\Recommendation\Domain\Model\Entities\Answer;
-
 use Exception;
-
-
 
 class Recommendation extends AggregateRoot
 {
-
     private array $events = [];
+
     private Answer $answer;
+
     public function __construct(
         public ?int $id,
         public string $uuid,
         public string $source,
         public string $sourceValue,
-    ) {
-    }
+    ) {}
 
     public function addAnswer(Answer $answer): void
     {
@@ -38,11 +35,12 @@ class Recommendation extends AggregateRoot
 
     public function getAnswers(): array
     {
-       return  $this->answer->toArray();
+        return $this->answer->toArray();
     }
+
     public function getAnswersAssocArray(): array
     {
-        return  $this->answer->toAssocArray();
+        return $this->answer->toAssocArray();
     }
 
     public function toArray(): array
@@ -52,21 +50,24 @@ class Recommendation extends AggregateRoot
             'source' => $this->source,
             'uuid' => $this->uuid,
             'sourceValue' => $this->sourceValue,
-            'id' => $this->id
+            'id' => $this->id,
         ];
     }
 
     private function throwCompleteEvent(): RecommendationComplete
     {
         ['id' => $id, 'query' => $query, 'answer' => $answer, 'source' => $source, 'sourceValue' => $sourceValue] = $this->toArray();
-       return new RecommendationComplete($id, $query, $answer, $source, $sourceValue);
+
+        return new RecommendationComplete($id, $query, $answer, $source, $sourceValue);
     }
 
-    public function clearEvents(): void {
+    public function clearEvents(): void
+    {
         $this->events = [];
     }
 
-    public function getEvents(): array {
+    public function getEvents(): array
+    {
         return $this->events;
     }
 }

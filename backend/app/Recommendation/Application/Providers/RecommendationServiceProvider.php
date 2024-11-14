@@ -7,13 +7,13 @@ use Illuminate\Support\ServiceProvider;
 class RecommendationServiceProvider extends ServiceProvider
 {
     public array $experts = [
-        "gpt" => \App\Recommendation\Domain\Model\ValueObjects\Expert\ExpertGPT::class,
-        "gigachat" => \App\Recommendation\Domain\Model\ValueObjects\Expert\ExpertGigaChat::class
+        'gpt' => \App\Recommendation\Domain\Model\ValueObjects\Expert\ExpertGPT::class,
+        'gigachat' => \App\Recommendation\Domain\Model\ValueObjects\Expert\ExpertGigaChat::class,
     ];
 
     public array $providers = [
-        "gpt" => \App\Recommendation\Domain\Model\ValueObjects\Provider\ProviderGPT::class,
-        "gigachat" => \App\Recommendation\Domain\Model\ValueObjects\Provider\ProviderGigaChat::class,
+        'gpt' => \App\Recommendation\Domain\Model\ValueObjects\Provider\ProviderGPT::class,
+        'gigachat' => \App\Recommendation\Domain\Model\ValueObjects\Provider\ProviderGigaChat::class,
     ];
 
     public function register()

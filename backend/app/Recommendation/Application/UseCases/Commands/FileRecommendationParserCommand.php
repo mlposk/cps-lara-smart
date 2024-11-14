@@ -4,12 +4,11 @@ namespace App\Recommendation\Application\UseCases\Commands;
 
 use App\Recommendation\Application\DTO\AttachmentRecommendationDto;
 use App\Recommendation\Application\Mappers\AnswerMapper;
-use App\Recommendation\Application\Mappers\RecommendationMapper;
 use App\Recommendation\Domain\Contracts\Repositories\RecommendationRepositoryInterface;
 use App\Recommendation\Domain\Model\Aggregates\Recommendation;
+use App\Recommendation\Infrastructure\Composers\CsvFileComposer;
 use App\Recommendation\Infrastructure\Mail\ProcessedFileEmail;
 use App\Recommendation\Infrastructure\Parsers\CsvFileParser;
-use App\Recommendation\Infrastructure\Composers\CsvFileComposer;
 use Box\Spout\Common\Exception\IOException;
 use Box\Spout\Writer\Exception\WriterNotOpenedException;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -19,8 +18,11 @@ use Illuminate\Support\Facades\Storage;
 class FileRecommendationParserCommand
 {
     private CsvFileComposer $csvFileComposer;
+
     private RecommendationRepositoryInterface $repository;
+
     private array $payload;
+
     private ?array $columns;
 
     /**
@@ -38,12 +40,11 @@ class FileRecommendationParserCommand
         $filerPath = $this->attachmentRecommendationDto->filePath;
         $columns = CsvFileParser::parseNextRow($filerPath);
 
-
-        if (!$columns) {
+        if (! $columns) {
             throw new \InvalidArgumentException('Empty fields');
         }
         if (array_diff($columns, ['title', 'body', 'project', 'smartTitle', 'recommendation'])) {
-            throw new \InvalidArgumentException('invalid fields: ' . implode(',', $columns));
+            throw new \InvalidArgumentException('invalid fields: '.implode(',', $columns));
         }
 
         $this->columns = $columns;
@@ -56,7 +57,6 @@ class FileRecommendationParserCommand
             }
         }
     }
-
 
     /**
      * @throws \Exception
@@ -75,8 +75,8 @@ class FileRecommendationParserCommand
     private function fillPayload(): void
     {
         $answersArray = $this->recommendation->getAnswers();
-        $fileName = $this->attachmentRecommendationDto->jobId . '_converted.csv';
-        $filePath = Storage::disk('public')->path('recommendations/' . $fileName);
+        $fileName = $this->attachmentRecommendationDto->jobId.'_converted.csv';
+        $filePath = Storage::disk('public')->path('recommendations/'.$fileName);
         $this->csvFileComposer = new CsvFileComposer($this->columns, $filePath);
         foreach ($answersArray as $item) {
             $this->csvFileComposer->addRow($item);
@@ -95,7 +95,6 @@ class FileRecommendationParserCommand
         );
     }
 
-
     /**
      * @throws \Exception
      */
@@ -105,17 +104,13 @@ class FileRecommendationParserCommand
         $this->fillRecommendation();
         $this->fillPayload();
 
-
         $this->repository->store($this->recommendation);
         $this->sendMail();
     }
-
 
     private function sendMail(): void
     {
         Mail::to($this->attachmentRecommendationDto->userEmail)
             ->send(new ProcessedFileEmail($this->attachmentRecommendationDto));
     }
-
-
 }

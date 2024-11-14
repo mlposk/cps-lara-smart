@@ -5,13 +5,16 @@ namespace App\Recommendation\Domain\Model\ValueObjects\GigaChat;
 class PromptValueObject
 {
     private string $task;
+
     private string $data;
+
     private string $postCondition;
+
     private array $taskData;
 
-    public function __construct(array $taskData, bool|null $isPostCondition = null)
+    public function __construct(array $taskData, ?bool $isPostCondition = null)
     {
-        $this->postCondition = $isPostCondition ? "true" : "false";
+        $this->postCondition = $isPostCondition ? 'true' : 'false';
         $this->taskData = $taskData;
         $this->init();
     }
@@ -43,7 +46,7 @@ class PromptValueObject
 
     private function initPostCondition(): void
     {
-        if ($this->postCondition === "true") {
+        if ($this->postCondition === 'true') {
             $this->postCondition = 'Ответ верни в следующем формате:
 {Название задачи по SMART} ### {Краткое объяснение, почему название соответствует критериям Specific, Measurable, Achievable, Relevant (не упоминай Time Bound). Используй общий текст, не расписывай каждую категорию подробно.}';
         }
@@ -54,9 +57,8 @@ class PromptValueObject
         return [
             [
                 'role' => 'user',
-                'content' => "$this->task $this->data $this->postCondition"
-            ]
+                'content' => "$this->task $this->data $this->postCondition",
+            ],
         ];
     }
 }
-

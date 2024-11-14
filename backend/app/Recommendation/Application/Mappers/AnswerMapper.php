@@ -7,30 +7,25 @@ use App\Recommendation\Domain\Model\ValueObjects\Provider\ProviderResponse;
 use App\Recommendation\Domain\Model\ValueObjects\Provider\Recommendation;
 use App\Recommendation\Domain\Model\ValueObjects\Provider\SmartTitle;
 use App\Recommendation\Domain\Model\ValueObjects\Query\Body;
+use App\Recommendation\Domain\Model\ValueObjects\Query\Deadline;
+use App\Recommendation\Domain\Model\ValueObjects\Query\Project;
 use App\Recommendation\Domain\Model\ValueObjects\Query\Query;
 use App\Recommendation\Domain\Model\ValueObjects\Query\QueryCollection;
 use App\Recommendation\Domain\Model\ValueObjects\Query\Title;
-use App\Recommendation\Domain\Model\ValueObjects\Query\Project;
-use App\Recommendation\Domain\Model\ValueObjects\Query\Deadline;
-
 use App\Recommendation\Domain\Model\ValueObjects\QueryResponse\QueryResponse;
 use App\Recommendation\Infrastructure\EloquentModels\AnswerEloquentModel;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-
 
 class AnswerMapper
 {
-
-
     /**
      * @throws Exception
      */
     public static function fromEloquentCollection(Collection $collection): Answer
     {
-        $model = new Answer();
+        $model = new Answer;
 
         foreach ($collection as $element) {
 
@@ -49,7 +44,6 @@ class AnswerMapper
 
         return $model;
     }
-
 
     /**
      * @throws Exception
@@ -74,22 +68,22 @@ class AnswerMapper
      */
     public static function fromArray(array $array): Answer
     {
-        $domainModel = new Answer();
+        $domainModel = new Answer;
 
         foreach ($array as $item) {
             $queryObject = QueryMapper::fromArray($item);
             $domainModel->addQuery($queryObject);
         }
+
         return $domainModel;
     }
 
-
     public static function toEloquent($answer): AnswerEloquentModel
     {
-        $eloquentModel = new AnswerEloquentModel();
+        $eloquentModel = new AnswerEloquentModel;
         $eloquentModel->query = json_encode($answer['query']);
         $eloquentModel->answer = json_encode($answer['response']);
+
         return $eloquentModel;
     }
-
 }

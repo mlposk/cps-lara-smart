@@ -10,6 +10,7 @@ use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+
 class ProcessedFileEmail extends Mailable
 {
     use Queueable, SerializesModels;
@@ -21,9 +22,7 @@ class ProcessedFileEmail extends Mailable
      */
     public function __construct(
         public readonly AttachmentRecommendationDto $attachmentRecommendationDto
-    )
-    {
-    }
+    ) {}
 
     /**
      * Get the message envelope.
@@ -53,8 +52,6 @@ class ProcessedFileEmail extends Mailable
 
     /**
      * Get the attachments for the message.
-     *
-     * @return array
      */
     public function attachments(): array
     {

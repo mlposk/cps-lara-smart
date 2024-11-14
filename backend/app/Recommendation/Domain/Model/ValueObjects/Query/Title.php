@@ -11,13 +11,13 @@ class Title
      */
     public function __construct(public ?string $title)
     {
-        if (!$title) {
+        if (! $title) {
             throw new Exception('required');
         }
     }
 
     public function __toString(): string
     {
-        return $this->title ?? "";
+        return $this->title ?? '';
     }
 }

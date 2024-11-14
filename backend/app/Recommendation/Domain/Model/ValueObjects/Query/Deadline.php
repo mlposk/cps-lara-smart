@@ -9,12 +9,10 @@ class Deadline
     /**
      * @throws Exception
      */
-    public function __construct(public ?string $deadline)
-    {
-    }
+    public function __construct(public ?string $deadline) {}
 
     public function __toString(): string
     {
-        return $this->deadline ?? "";
+        return $this->deadline ?? '';
     }
 }

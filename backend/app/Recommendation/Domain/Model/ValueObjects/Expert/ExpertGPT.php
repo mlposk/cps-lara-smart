@@ -11,16 +11,18 @@ use App\Recommendation\Domain\Model\ValueObjects\GPT\StreamValueObject;
 class ExpertGPT implements RecommendationExpertInterface
 {
     private ModelValueObject $model;
+
     private PromptValueObject $prompt;
+
     private ContextValueObject $context;
+
     private StreamValueObject $stream;
+
     private array $taskData;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
-    private function init(array $taskData, bool|null $isPostCondition): void
+    private function init(array $taskData, ?bool $isPostCondition): void
     {
         $this->initTaskData($taskData);
         $this->initModel();
@@ -36,25 +38,25 @@ class ExpertGPT implements RecommendationExpertInterface
 
     private function initModel(): void
     {
-        $this->model = new ModelValueObject();
+        $this->model = new ModelValueObject;
     }
 
-    private function initPrompt(bool|null $isPostCondition): void
+    private function initPrompt(?bool $isPostCondition): void
     {
         $this->prompt = new PromptValueObject($this->taskData, $isPostCondition);
     }
 
     private function initContext(): void
     {
-        $this->context = new ContextValueObject();
+        $this->context = new ContextValueObject;
     }
 
     private function initStream(): void
     {
-        $this->stream = new StreamValueObject();
+        $this->stream = new StreamValueObject;
     }
 
-    public function getMessage(array $taskData, bool|null $isPostCondition = null): array
+    public function getMessage(array $taskData, ?bool $isPostCondition = null): array
     {
         $this->init($taskData, $isPostCondition);
 
@@ -66,7 +68,7 @@ class ExpertGPT implements RecommendationExpertInterface
         return [
             'model' => $this->model->getModel(),
             'messages' => array_merge($this->context->getContext(), $this->prompt->getPrompt()),
-            'stream' => $this->stream->getStream()
+            'stream' => $this->stream->getStream(),
         ];
     }
 }

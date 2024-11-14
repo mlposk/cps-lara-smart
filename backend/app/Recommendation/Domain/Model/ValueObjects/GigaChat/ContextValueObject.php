@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Recommendation\Domain\Model\ValueObjects\GigaChat;
 
 class ContextValueObject
@@ -8,9 +7,10 @@ class ContextValueObject
     private array $context = [
         [
             'role' => 'system',
-            'content' => 'You are a helpful assistant.'
-        ]
+            'content' => 'You are a helpful assistant.',
+        ],
     ];
+
     private bool $isContextNeeded;
 
     public function __construct(bool $isContextNeeded = true)
@@ -37,13 +37,13 @@ class ContextValueObject
                 Проект: "Кабинет ГД Томск".
                 Ответ верни в следующем формате:
                 {Название задачи по SMART} ### {Краткое объяснение, почему название соответствует критериям Specific, Measurable, Achievable, Relevant (не упоминай Time Bound). Используй общий текст, не расписывай каждую категорию подробно.}
-                '
+                ',
                 ];
             $this->context[] =
                 [
                     'role' => 'assistant',
                     'content' => 'КР Томск: Реализация функционала выгрузки списка подробного чек-листа
-             загруженных отчетов с учетом фильтров и сортировок в xlsx-файл в административном модуле. ### Это название уточняет, что нужно сделать, как измерить успех (функционал выгрузки данных) и для какого проекта это делается.'
+             загруженных отчетов с учетом фильтров и сортировок в xlsx-файл в административном модуле. ### Это название уточняет, что нужно сделать, как измерить успех (функционал выгрузки данных) и для какого проекта это делается.',
                 ];
         }
     }

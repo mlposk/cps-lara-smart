@@ -6,7 +6,6 @@ use App\Recommendation\Application\DTO\AttachmentRecommendationDto;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
-use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -22,8 +21,7 @@ class ConfirmEmail extends Mailable
      */
     public function __construct(
         public readonly AttachmentRecommendationDto $attachmentRecommendationDto
-    )
-    {
+    ) {
         //
     }
 
@@ -51,5 +49,4 @@ class ConfirmEmail extends Mailable
             view: 'emails.recommendation.confirm_file',
         );
     }
-
 }

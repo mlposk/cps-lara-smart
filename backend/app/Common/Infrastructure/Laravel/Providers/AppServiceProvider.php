@@ -2,9 +2,9 @@
 
 namespace App\Common\Infrastructure\Laravel\Providers;
 
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class AppServiceProvider extends ServiceProvider
@@ -33,6 +33,7 @@ class AppServiceProvider extends ServiceProvider
             if ($data instanceof \JsonSerializable) {
                 $data = $data->jsonSerialize();
             }
+
             return response()->json($data, $code);
         });
 

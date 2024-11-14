@@ -5,7 +5,6 @@ namespace App\Common\Infrastructure\Laravel\Providers;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\ServiceProvider;
 
-
 class BroadcastServiceProvider extends ServiceProvider
 {
     /**

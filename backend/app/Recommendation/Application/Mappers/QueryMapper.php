@@ -3,15 +3,13 @@
 namespace App\Recommendation\Application\Mappers;
 
 use App\Recommendation\Domain\Model\ValueObjects\Query\Body;
+use App\Recommendation\Domain\Model\ValueObjects\Query\Deadline;
+use App\Recommendation\Domain\Model\ValueObjects\Query\Project;
 use App\Recommendation\Domain\Model\ValueObjects\Query\Query;
 use App\Recommendation\Domain\Model\ValueObjects\Query\QueryCollection;
 use App\Recommendation\Domain\Model\ValueObjects\Query\Title;
-use App\Recommendation\Domain\Model\ValueObjects\Query\Project;
-use App\Recommendation\Domain\Model\ValueObjects\Query\Deadline;
-
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 
 class QueryMapper
 {
@@ -29,6 +27,7 @@ class QueryMapper
                 deadline: new Deadline($request->input('deadline', ''))
             )
         );
+
         return new QueryCollection($collection);
     }
 

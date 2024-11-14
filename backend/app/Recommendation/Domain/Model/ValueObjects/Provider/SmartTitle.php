@@ -2,8 +2,6 @@
 
 namespace App\Recommendation\Domain\Model\ValueObjects\Provider;
 
-
-use App\Common\Domain\ValueObject;
 use Exception;
 
 class SmartTitle
@@ -13,7 +11,7 @@ class SmartTitle
      */
     public function __construct(public ?string $smartTitle)
     {
-        if (!$smartTitle) {
+        if (! $smartTitle) {
             throw new Exception('required');
         }
     }

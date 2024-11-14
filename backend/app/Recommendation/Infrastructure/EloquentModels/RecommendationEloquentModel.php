@@ -3,9 +3,7 @@
 namespace App\Recommendation\Infrastructure\EloquentModels;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property string| $uuid
@@ -14,7 +12,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class RecommendationEloquentModel extends Model
 {
-
     protected $table = 'recommendations';
 
     /**
@@ -26,7 +23,7 @@ class RecommendationEloquentModel extends Model
         'query',
         'uuid',
         'answer',
-        'uuid'
+        'uuid',
     ];
 
     /**
@@ -44,5 +41,4 @@ class RecommendationEloquentModel extends Model
     {
         return $this->hasMany(AnswerEloquentModel::class, 'recommendation_id');
     }
-
 }

@@ -2,16 +2,13 @@
 
 namespace App\Recommendation\Presentation\API;
 
+use App\Common\Infrastructure\Laravel\Controllers\Controller;
 use App\Recommendation\Application\DTO\AttachmentRecommendationDto;
 use App\Recommendation\Application\Mappers\RecommendationMapper;
-use App\Recommendation\Application\UseCases\Commands\FileRecommendationParserCommand;
 use App\Recommendation\Application\UseCases\Commands\StoreRecommendationEntryCommand;
 use App\Recommendation\Application\UseCases\Queries\FindAllRecommendationsQuery;
-use App\Recommendation\Infrastructure\EloquentModels\RecommendationEloquentModel;
 use App\Recommendation\Infrastructure\Jobs\PerformRecommendationFile;
 use App\Recommendation\Infrastructure\Mail\ConfirmEmail;
-use App\Common\Infrastructure\Laravel\Controllers\Controller;
-
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -24,7 +21,7 @@ class RecommendationController extends Controller
     public function getAll()
     {
         try {
-            return response()->success((new FindAllRecommendationsQuery())->handle());
+            return response()->success((new FindAllRecommendationsQuery)->handle());
         } catch (\Throwable $exception) {
             return response()->error($exception->getMessage(), Response::HTTP_BAD_REQUEST);
         }
@@ -40,28 +37,26 @@ class RecommendationController extends Controller
 
             $request->validate([
                 'file' => 'required',
-                'email' => 'required'
+                'email' => 'required',
             ]);
-
 
             $recommendation = RecommendationMapper::fromArray([
                 'source' => 'email',
-                'sourceValue' => $request->input('email')
+                'sourceValue' => $request->input('email'),
             ]);
 
             $file = $request->file('file');
             $fileUrl = Storage::disk('public')->putFileAs(
                 'recommendations',
                 $file,
-                $recommendation->uuid . '.' . $file->getClientOriginalExtension()
+                $recommendation->uuid.'.'.$file->getClientOriginalExtension()
             );
 
             $attachmentDto = new AttachmentRecommendationDto(
                 userEmail: $request->input('email'),
-                filePath:  Storage::disk('public')->path($fileUrl),
+                filePath: Storage::disk('public')->path($fileUrl),
                 jobId: $recommendation->uuid
             );
-
 
             $job = new PerformRecommendationFile($attachmentDto, $recommendation);
             dispatch($job);
@@ -85,6 +80,7 @@ class RecommendationController extends Controller
 
             $recommendation = RecommendationMapper::fromRequest($request);
             $recommendation = (new StoreRecommendationEntryCommand($recommendation))->execute();
+
             return response()->success($recommendation->toArray());
 
         } catch (\DomainException $domainException) {

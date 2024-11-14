@@ -2,8 +2,6 @@
 
 namespace App\Recommendation\Domain\Model\ValueObjects\QueryResponse;
 
-use App\Recommendation\Domain\Model\ValueObjects\Provider\Result;
-use App\Recommendation\Domain\Model\ValueObjects\Query\Query;
 use Illuminate\Support\Collection;
 
 class QueryResponseCollection
@@ -19,25 +17,24 @@ class QueryResponseCollection
     {
         $this->collection->push($queryResponse);
     }
+
     public function toAssocArray(): array
     {
-         return $this->collection->map(function ($item) {
+        return $this->collection->map(function ($item) {
             return [
                 'query' => $item->query->toArray(),
-                'response' => $item->result->toArray()
+                'response' => $item->result->toArray(),
             ];
         })->all();
     }
+
     public function toArray(): array
     {
         return $this->collection->map(function ($item) {
             return [
-               ...$item->query->toArray(),
-               ...$item->result->toArray()
+                ...$item->query->toArray(),
+                ...$item->result->toArray(),
             ];
         })->all();
     }
-
-
-
 }

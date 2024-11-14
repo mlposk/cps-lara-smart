@@ -2,14 +2,11 @@
 
 namespace App\Recommendation\Infrastructure\EloquentModels;
 
-
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class AnswerEloquentModel extends Model
 {
-
     protected $table = 'answers';
 
     protected $fillable = ['recommendation_id', 'query', 'answer'];
@@ -19,7 +16,6 @@ class AnswerEloquentModel extends Model
     {
         return $this->hasOne(RecommendationEloquentModel::class, 'recommendation_id');
     }
-
 
     /**
      * The attributes that should be hidden for serialization.

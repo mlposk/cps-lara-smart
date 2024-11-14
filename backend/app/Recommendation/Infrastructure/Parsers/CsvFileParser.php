@@ -1,39 +1,44 @@
 <?php
 
-
 namespace App\Recommendation\Infrastructure\Parsers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 use Box\Spout\Reader\CSV\Reader;
 use Box\Spout\Reader\XLSX\Reader as XLSXReader;
+use Illuminate\Support\Facades\Storage;
 use InvalidArgumentException;
 
 class CsvFileParser
 {
     private static string $rootDirectoryPath;
-    private static Reader | XLSXReader $reader;
+
+    private static Reader|XLSXReader $reader;
+
     private static string $filePath;
+
     private static \Iterator $rowIterator;
+
     private static bool $initialized = false;
+
     private static bool $isOnlyHeader = true;
+
     private static array $headers = [];
 
-    public static function parseNextRow(string $fileUrl = null): ?array
+    public static function parseNextRow(?string $fileUrl = null): ?array
     {
-        if (!self::$initialized) {
+        if (! self::$initialized) {
             self::$filePath = $fileUrl;
             self::init();
             self::execute();
         }
 
-        if (!self::$rowIterator->valid()) {
+        if (! self::$rowIterator->valid()) {
             self::terminate();
             if (self::$isOnlyHeader) {
                 self::$isOnlyHeader = true;
                 throw new InvalidArgumentException('The CSV file contains only header row and no data.');
             }
+
             return null;
         }
 
@@ -43,6 +48,7 @@ class CsvFileParser
 
         if (empty(self::$headers)) {
             self::$headers = $row;
+
             return self::$headers;
         }
 
@@ -69,7 +75,7 @@ class CsvFileParser
     private static function terminate(): void
     {
         self::$reader->close();
-//        self::deleteFile();
+        //        self::deleteFile();
         self::$initialized = false;
     }
 

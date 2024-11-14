@@ -25,7 +25,7 @@ class RecommendationRepository implements RecommendationRepositoryInterface
         $recommendationEloquent->save();
         $recommendationId = $recommendationEloquent->id;
 
-        foreach ($recommendation->getAnswersAssocArray() as $answer){
+        foreach ($recommendation->getAnswersAssocArray() as $answer) {
             $answerEloquentModel = AnswerMapper::toEloquent($answer);
             $answerEloquentModel->recommendation_id = $recommendationId;
             $answerEloquentModel->save();
@@ -38,7 +38,6 @@ class RecommendationRepository implements RecommendationRepositoryInterface
 
         // Очищаем события после публикации
         $recommendation->clearEvents();
-
 
         return RecommendationMapper::fromEloquent($recommendationEloquent);
 

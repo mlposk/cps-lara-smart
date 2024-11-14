@@ -4,22 +4,20 @@ namespace App\Recommendation\Application\Mappers;
 
 use App\Recommendation\Domain\Model\Aggregates\Recommendation;
 use App\Recommendation\Domain\Model\Entities\Answer;
+use App\Recommendation\Domain\Model\ValueObjects\ContactSource\Source;
+use App\Recommendation\Domain\Model\ValueObjects\ContactSource\Value;
 use App\Recommendation\Domain\Model\ValueObjects\Query\Body;
 use App\Recommendation\Domain\Model\ValueObjects\Query\Deadline;
 use App\Recommendation\Domain\Model\ValueObjects\Query\Project;
 use App\Recommendation\Domain\Model\ValueObjects\Query\Query;
-use App\Recommendation\Domain\Model\ValueObjects\ContactSource\Source;
-use App\Recommendation\Domain\Model\ValueObjects\ContactSource\Value;
 use App\Recommendation\Domain\Model\ValueObjects\Query\Title;
 use App\Recommendation\Infrastructure\EloquentModels\RecommendationEloquentModel;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-
 class RecommendationMapper
 {
-
     /**
      * @throws \Exception
      */
@@ -35,13 +33,13 @@ class RecommendationMapper
         $answer = AnswerMapper::fromEloquentCollection($recommendationEloquentModel->answers);
 
         $recommendation->addAnswer($answer);
+
         return $recommendation;
     }
 
-
     public static function toEloquent(Recommendation $recommendation): RecommendationEloquentModel
     {
-        $companyEloquent = new RecommendationEloquentModel();
+        $companyEloquent = new RecommendationEloquentModel;
         if ($recommendation->id) {
             $companyEloquent = RecommendationEloquentModel::query()->findOrFail($recommendation->id);
         }
@@ -59,7 +57,7 @@ class RecommendationMapper
      */
     public static function fromRequest(Request $request): Recommendation
     {
-        $answer = new Answer();
+        $answer = new Answer;
 
         $query = new Query(
             title: new Title($request->input('title')),
@@ -68,7 +66,6 @@ class RecommendationMapper
             deadline: new Deadline($request->input('deadline', ''))
         );
         $answer->addQuery($query);
-
 
         $recommendation = new Recommendation(
             id: null,
@@ -90,6 +87,7 @@ class RecommendationMapper
     {
         $recommendation = static::fromArray($array, $contactSource);
         $recommendation->addAnswer(AnswerMapper::fromArray($array));
+
         return $recommendation;
     }
 
@@ -102,5 +100,4 @@ class RecommendationMapper
             sourceValue: $contactSource['sourceValue'],
         );
     }
-
 }

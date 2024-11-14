@@ -7,6 +7,7 @@ use App\Recommendation\Domain\Contracts\ValueObjects\Provider\RecommendationProv
 class ProviderGigaChat implements RecommendationProviderInterface
 {
     private string $apiUrl;
+
     private string $token;
 
     public function __construct()
@@ -29,19 +30,19 @@ class ProviderGigaChat implements RecommendationProviderInterface
     {
         $url = config('gigachat.token_url');
         $headers = [
-            'Authorization: Basic ' . base64_encode(
-                config('gigachat.client_id') . ":" . config('gigachat.client_secret')
+            'Authorization: Basic '.base64_encode(
+                config('gigachat.client_id').':'.config('gigachat.client_secret')
             ),
-            'RqUID: ' . config('gigachat.rquid'),
-            'Content-Type: application/x-www-form-urlencoded'
+            'RqUID: '.config('gigachat.rquid'),
+            'Content-Type: application/x-www-form-urlencoded',
         ];
         $data = [
-            'scope' => 'GIGACHAT_API_PERS'
+            'scope' => 'GIGACHAT_API_PERS',
         ];
         $result = $this->getResult($url, $headers, http_build_query($data));
 
-        if (!empty($result["access_token"])) {
-            $this->token = $result["access_token"];
+        if (! empty($result['access_token'])) {
+            $this->token = $result['access_token'];
         } else {
             throw new \DomainException('Invalid token: received null token');
         }
@@ -57,12 +58,12 @@ class ProviderGigaChat implements RecommendationProviderInterface
             CURLOPT_HTTPHEADER => $headers,
             CURLOPT_RETURNTRANSFER => 1,
         ]);
-        if (!empty($data)) {
+        if (! empty($data)) {
             curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         }
 
-
         $result = curl_exec($curl);
+
         return json_decode($result, true);
     }
 
@@ -74,14 +75,14 @@ class ProviderGigaChat implements RecommendationProviderInterface
     {
         $response_data = $this->getResult($this->apiUrl, $this->prepareHeaders(), json_encode($query));
 
-        if (!isset($response_data['choices'][0]['message']['content'])) {
+        if (! isset($response_data['choices'][0]['message']['content'])) {
             throw new \DomainException('Invalid response format: content is missing');
         }
 
         $response = explode('###', $response_data['choices'][0]['message']['content']);
 
         if (count($response) < 2) {
-            throw new \DomainException('Invalid response format: expected 2 parts, but received ' . count($response));
+            throw new \DomainException('Invalid response format: expected 2 parts, but received '.count($response));
         }
 
         return new Result(new SmartTitle($response[0]), new Recommendation($response[1]));
@@ -91,8 +92,7 @@ class ProviderGigaChat implements RecommendationProviderInterface
     {
         return [
             'Content-Type: application/json',
-            'Authorization: Bearer ' . $this->token,
+            'Authorization: Bearer '.$this->token,
         ];
     }
 }
-

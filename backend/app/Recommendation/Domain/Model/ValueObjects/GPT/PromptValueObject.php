@@ -1,19 +1,20 @@
 <?php
 
-
 namespace App\Recommendation\Domain\Model\ValueObjects\GPT;
-
 
 class PromptValueObject
 {
     private string $task;
+
     private string $data;
+
     private string $postCondition;
+
     private array $taskData;
 
-    public function __construct(array $taskData, bool|null $isPostCondition = null)
+    public function __construct(array $taskData, ?bool $isPostCondition = null)
     {
-        $this->postCondition = $isPostCondition ? "true" : "false";
+        $this->postCondition = $isPostCondition ? 'true' : 'false';
         $this->taskData = $taskData;
         $this->init();
     }
@@ -45,7 +46,7 @@ class PromptValueObject
 
     private function initPostCondition(): void
     {
-        if ($this->postCondition === "true") {
+        if ($this->postCondition === 'true') {
             $this->postCondition = 'Верни следующее: {Только название задачи по SMART без вводного слова} {символ %d%} {Почему она не попадает под SMART, распиши критерии, но не пиши про Time Bound}';
         }
     }
@@ -55,8 +56,8 @@ class PromptValueObject
         return [
             [
                 'role' => 'user',
-                'content' => "$this->task $this->data $this->postCondition"
-            ]
+                'content' => "$this->task $this->data $this->postCondition",
+            ],
         ];
     }
 }

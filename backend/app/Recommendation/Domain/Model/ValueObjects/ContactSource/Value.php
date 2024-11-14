@@ -2,13 +2,12 @@
 
 namespace App\Recommendation\Domain\Model\ValueObjects\ContactSource;
 
-class Value{
+class Value
+{
+    public function __construct(public ?string $value) {}
 
-    public function __construct(public ?string $value)
-    {
-    }
     public function __toString(): string
     {
-        return $this->value ?? "";
+        return $this->value ?? '';
     }
 }

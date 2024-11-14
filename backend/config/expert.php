@@ -1,5 +1,5 @@
 <?php
 
 return [
-    "model" => env("EXPERT_MODEL", "gpt"),
+    'model' => env('EXPERT_MODEL', 'gpt'),
 ];

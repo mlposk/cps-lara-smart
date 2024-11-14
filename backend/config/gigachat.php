@@ -10,6 +10,6 @@ return [
 
     'client_id' => env('GIGACHAT_CLIENT_ID'),
 
-    'client_secret' => env('GIGACHAT_CLIENT_SECRET')
+    'client_secret' => env('GIGACHAT_CLIENT_SECRET'),
 
 ];
