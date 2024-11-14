@@ -39,7 +39,7 @@ class RecommendationMapper
 
     public static function toEloquent(Recommendation $recommendation): RecommendationEloquentModel
     {
-        $companyEloquent = new RecommendationEloquentModel;
+        $companyEloquent = new RecommendationEloquentModel();
         if ($recommendation->id) {
             $companyEloquent = RecommendationEloquentModel::query()->findOrFail($recommendation->id);
         }
@@ -57,7 +57,7 @@ class RecommendationMapper
      */
     public static function fromRequest(Request $request): Recommendation
     {
-        $answer = new Answer;
+        $answer = new Answer();
 
         $query = new Query(
             title: new Title($request->input('title')),

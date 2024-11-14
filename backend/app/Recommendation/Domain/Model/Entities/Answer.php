@@ -122,11 +122,11 @@ class Answer extends Entity
 
     private function queryResponseCollection(): void
     {
-        $this->queryResponses = new QueryResponseCollection;
+        $this->queryResponses = new QueryResponseCollection();
     }
 
     private function initQueryCollection(): void
     {
-        $this->queries = new QueryCollection;
+        $this->queries = new QueryCollection();
     }
 }

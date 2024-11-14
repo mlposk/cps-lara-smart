@@ -8,7 +8,9 @@ class Source
 
     public const EMAIL = 'email';
 
-    public function __construct(public ?string $source) {}
+    public function __construct(public ?string $source)
+    {
+    }
 
     public function __toString(): string
     {

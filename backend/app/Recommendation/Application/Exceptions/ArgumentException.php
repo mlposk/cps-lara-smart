@@ -1,3 +1,5 @@
 <?php
 
-class ArgumentException extends DomainException {}
+class ArgumentException extends DomainException
+{
+}

@@ -13,7 +13,8 @@ class ProviderResponse extends ValueObject
     public function __construct(
         public SmartTitle $smartTitle,
         public Recommendation $recommendation,
-    ) {}
+    ) {
+    }
 
     public function toArray(): array
     {

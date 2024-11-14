@@ -9,7 +9,9 @@ class Project
     /**
      * @throws Exception
      */
-    public function __construct(public ?string $project) {}
+    public function __construct(public ?string $project)
+    {
+    }
 
     public function __toString(): string
     {

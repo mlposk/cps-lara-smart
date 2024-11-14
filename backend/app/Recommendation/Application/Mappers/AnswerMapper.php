@@ -25,7 +25,7 @@ class AnswerMapper
      */
     public static function fromEloquentCollection(Collection $collection): Answer
     {
-        $model = new Answer;
+        $model = new Answer();
 
         foreach ($collection as $element) {
 
@@ -68,7 +68,7 @@ class AnswerMapper
      */
     public static function fromArray(array $array): Answer
     {
-        $domainModel = new Answer;
+        $domainModel = new Answer();
 
         foreach ($array as $item) {
             $queryObject = QueryMapper::fromArray($item);
@@ -80,7 +80,7 @@ class AnswerMapper
 
     public static function toEloquent($answer): AnswerEloquentModel
     {
-        $eloquentModel = new AnswerEloquentModel;
+        $eloquentModel = new AnswerEloquentModel();
         $eloquentModel->query = json_encode($answer['query']);
         $eloquentModel->answer = json_encode($answer['response']);
 

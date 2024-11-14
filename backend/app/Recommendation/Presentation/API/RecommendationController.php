@@ -21,7 +21,7 @@ class RecommendationController extends Controller
     public function getAll()
     {
         try {
-            return response()->success((new FindAllRecommendationsQuery)->handle());
+            return response()->success((new FindAllRecommendationsQuery())->handle());
         } catch (\Throwable $exception) {
             return response()->error($exception->getMessage(), Response::HTTP_BAD_REQUEST);
         }

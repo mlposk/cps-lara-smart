@@ -18,7 +18,8 @@ class Recommendation extends AggregateRoot
         public string $uuid,
         public string $source,
         public string $sourceValue,
-    ) {}
+    ) {
+    }
 
     public function addAnswer(Answer $answer): void
     {

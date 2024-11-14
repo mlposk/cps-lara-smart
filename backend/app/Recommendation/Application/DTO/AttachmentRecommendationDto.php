@@ -8,5 +8,6 @@ class AttachmentRecommendationDto
         public readonly string $userEmail,
         public readonly string $filePath,
         public readonly string $jobId
-    ) {}
+    ) {
+    }
 }

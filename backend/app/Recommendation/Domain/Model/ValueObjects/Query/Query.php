@@ -15,7 +15,8 @@ class Query extends ValueObject
         public Body $body,
         public Project $project,
         public Deadline $deadline
-    ) {}
+    ) {
+    }
 
     public function toArray(): array
     {

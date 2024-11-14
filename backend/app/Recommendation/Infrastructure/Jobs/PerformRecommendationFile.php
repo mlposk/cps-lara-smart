@@ -14,7 +14,10 @@ use Illuminate\Queue\SerializesModels;
 
 class PerformRecommendationFile implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
@@ -24,7 +27,8 @@ class PerformRecommendationFile implements ShouldQueue
     public function __construct(
         private readonly AttachmentRecommendationDto $attachmentRecommendationDto,
         private readonly Recommendation $recommendation,
-    ) {}
+    ) {
+    }
 
     /**
      * Execute the job.

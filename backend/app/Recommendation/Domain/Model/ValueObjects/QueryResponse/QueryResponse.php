@@ -10,5 +10,6 @@ class QueryResponse
     public function __construct(
         public readonly Query $query,
         public readonly ProviderResponse $result
-    ) {}
+    ) {
+    }
 }

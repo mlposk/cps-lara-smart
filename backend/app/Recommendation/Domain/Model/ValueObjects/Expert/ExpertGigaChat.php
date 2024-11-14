@@ -20,7 +20,9 @@ class ExpertGigaChat implements RecommendationExpertInterface
 
     private array $taskData;
 
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     private function init(array $taskData, ?bool $isPostCondition): void
     {
@@ -38,7 +40,7 @@ class ExpertGigaChat implements RecommendationExpertInterface
 
     private function initModel(): void
     {
-        $this->model = new ModelValueObject;
+        $this->model = new ModelValueObject();
     }
 
     private function initPrompt(?bool $isPostCondition): void
@@ -48,12 +50,12 @@ class ExpertGigaChat implements RecommendationExpertInterface
 
     private function initContext(): void
     {
-        $this->context = new ContextValueObject;
+        $this->context = new ContextValueObject();
     }
 
     private function initStream(): void
     {
-        $this->stream = new StreamValueObject;
+        $this->stream = new StreamValueObject();
     }
 
     public function getMessage(array $taskData, ?bool $isPostCondition = null): array

@@ -13,7 +13,8 @@ use Illuminate\Queue\SerializesModels;
 
 class ProcessedFileEmail extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new message instance.
@@ -22,7 +23,8 @@ class ProcessedFileEmail extends Mailable
      */
     public function __construct(
         public readonly AttachmentRecommendationDto $attachmentRecommendationDto
-    ) {}
+    ) {
+    }
 
     /**
      * Get the message envelope.
