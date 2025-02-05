@@ -1,0 +1,34 @@
+services:
+  larasmart-ollama:
+    container_name: larasmart-ollama
+    build:
+      context: .docker/ollama
+    healthcheck:
+      test: [ "CMD", "ollama", "list" ]
+      interval: 10s
+      timeout: 30s
+      retries: 5
+      start_period: 10s
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+      - OLLAMA_ORIGINS=http://0.0.0.0:11434
+    ports:
+      - "11434:11434"
+    networks:
+      - larasmart-network
+    volumes:
+      - larasmart-ollama:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
+
+networks:
+  larasmart-network:
+    external: true
+
+volumes:
+  larasmart-ollama:
