@@ -18,13 +18,6 @@ services:
       - larasmart-network
     volumes:
       - larasmart-ollama:/root/.ollama
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [ gpu ]
 
 networks:
   larasmart-network:
