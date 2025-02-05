@@ -9,6 +9,7 @@ services:
       timeout: 30s
       retries: 5
       start_period: 10s
+    tty: true
     environment:
       - OLLAMA_HOST=0.0.0.0
       - OLLAMA_ORIGINS=http://0.0.0.0:11434
