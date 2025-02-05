@@ -10,4 +10,4 @@ while [ "$(ollama list | grep 'NAME')" == "" ]; do
 done
 
 
-ollama pull qwen2.5:3b
+ollama run qwen2.5:3b
