@@ -79,8 +79,8 @@ class RecommendationController extends Controller
         try {
 
             $recommendation = RecommendationMapper::fromRequest($request);
-            $recommendation = (new StoreRecommendationEntryCommand($recommendation))->execute();
-
+//            $recommendation = (new StoreRecommendationEntryCommand($recommendation))->execute();
+$recommendation->executeAnswer();
             return response()->success($recommendation->toArray());
 
         } catch (\DomainException $domainException) {
