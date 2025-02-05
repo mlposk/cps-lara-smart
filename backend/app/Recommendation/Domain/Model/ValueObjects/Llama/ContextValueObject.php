@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Recommendation\Domain\Model\ValueObjects\Llama;
-
 
 class ContextValueObject
 {
