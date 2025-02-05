@@ -9,11 +9,13 @@ class RecommendationServiceProvider extends ServiceProvider
     public array $experts = [
         'gpt' => \App\Recommendation\Domain\Model\ValueObjects\Expert\ExpertGPT::class,
         'gigachat' => \App\Recommendation\Domain\Model\ValueObjects\Expert\ExpertGigaChat::class,
+        'llama' => \App\Recommendation\Domain\Model\ValueObjects\Expert\ExpertLlama::class,
     ];
 
     public array $providers = [
         'gpt' => \App\Recommendation\Domain\Model\ValueObjects\Provider\ProviderGPT::class,
         'gigachat' => \App\Recommendation\Domain\Model\ValueObjects\Provider\ProviderGigaChat::class,
+        'llama' => \App\Recommendation\Domain\Model\ValueObjects\Provider\ProviderLlama::class,
     ];
 
     public function register()
