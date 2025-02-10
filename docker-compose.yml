@@ -3,7 +3,7 @@ services:
     build:
       context: .docker/nginx
     ports:
-      - "8081:8081"
+      - ${PROXY_PORT:-8081}:8081
     volumes:
       - "./backend:/var/www/html"
     depends_on:
@@ -12,7 +12,7 @@ services:
       logging:
         driver: "loki"
         options:
-          loki-url: "http://localhost:3100/loki/api/v1/push"
+          loki-url: ${LOKI_PLUGIN_URL}
           loki-batch-size: "100"
           loki-retries: 2
           loki-max-backoff: 1000ms
@@ -28,7 +28,7 @@ services:
     volumes:
       - "./backend:/var/www/html"
     environment:
-      - XDG_CONFIG_HOME=/tmp
+      - XDG_CONFIG_HOME=${XDG_CONFIG_HOME}
     depends_on:
       larasmart-mysql:
         condition: service_healthy
@@ -40,12 +40,12 @@ services:
     build:
       context: .docker/mysql
     ports:
-      - "3301:3306"
+      - ${MYSQL_PORT:-3306}:3306
     volumes:
       - mysql-storage:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=laravel
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
@@ -59,7 +59,7 @@ services:
     build:
       context: .docker/redis
     ports:
-      - "6379:6379"
+      - ${REDIS_PORT:-6379}:6379
     volumes:
       - redis-storage:/data
     depends_on:
@@ -72,7 +72,7 @@ services:
     build:
       context: .docker/prometheus
     ports:
-      - "9091:9090"
+      - ${PROM_PORT:-9090}:9090
     networks:
       - larasmart-network
     command:
@@ -82,7 +82,7 @@ services:
   larasmart-node-exporter:
     image: prom/node-exporter:latest
     ports:
-      - "9100:9100"
+      - ${NODE_EXPORTER_PORT:-9100}:9100
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -101,9 +101,9 @@ services:
   larasmart-grafana:
     image: grafana/grafana
     ports:
-      - "3000:3000"
+      - ${GRAFANA_PORT:-3000}:3000
     environment:
-      GF_SECURITY_ADMIN_PASSWORD: "admin"
+      GF_SECURITY_ADMIN_PASSWORD: ${GF_SECURITY_ADMIN_PASSWORD}
     volumes:
       - grafana-storage:/var/lib/grafana
     depends_on:
@@ -125,7 +125,7 @@ services:
     build:
       context: .docker/loki
     ports:
-      - "3100:3100"
+      - ${LOKI_PORT:-3100}:3100
     depends_on:
       - larasmart-prometheus
     command:
@@ -133,12 +133,29 @@ services:
     networks:
       - larasmart-network
 
+  larasmart-ollama:
+    container_name: larasmart-ollama
+    build:
+      context: .docker/ollama
+    healthcheck:
+      test: [ "CMD", "ollama", "list" ]
+      interval: 10s
+      timeout: 30s
+      retries: 5
+      start_period: 10s
+    tty: true
+    ports:
+      - ${OLLAMA_PORT:-11434}:11434
+    networks:
+      - larasmart-network
+    volumes:
+      - ollama-storage:/root/.ollama
+
 networks:
   larasmart-network:
-    name: larasmart-network
-    driver: bridge
 
 volumes:
   grafana-storage:
   redis-storage:
   mysql-storage:
+  ollama-storage:
