@@ -150,6 +150,11 @@ services:
       - larasmart-network
     volumes:
       - ollama-storage:/root/.ollama
+    deploy:
+        resources:
+          reservations:
+            devices:
+              - capabilities: [ gpu ]
 
 networks:
   larasmart-network:
