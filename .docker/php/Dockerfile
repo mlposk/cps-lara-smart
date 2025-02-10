@@ -37,8 +37,9 @@ EXPOSE 9003
 #endregion
 
 #region add docker host related user
-RUN adduser ${USER} --disabled-password
-RUN addgroup ${GROUP} www-data
+RUN addgroup ${GROUP}
+RUN adduser ${USER} --disabled-password -G ${GROUP}
+RUN addgroup www-data ${GROUP}
 #endregion
 
 #region copy config files
@@ -55,7 +56,8 @@ RUN mkdir -p /tmp/supervisor/
 #endregion
 
 #region set rights
-RUN chown -R ${USER}:${GROUP} /var/www/html /tmp/supervisor
+RUN chown -R ${USER}:${GROUP} /var/www/html
+RUN chown -R ${USER}:${GROUP} /tmp/supervisor
 #endregion
 
 USER ${USER}
