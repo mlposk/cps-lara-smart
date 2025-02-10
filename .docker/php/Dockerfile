@@ -1,7 +1,7 @@
 FROM php:8.3-fpm-alpine
 
-ARG USER=github
-ARG GROUP=github
+ARG USER=git
+ARG GROUP=develop
 ARG XDEBUG_VERSION=3.3.2
 
 #region install & update dependencies
