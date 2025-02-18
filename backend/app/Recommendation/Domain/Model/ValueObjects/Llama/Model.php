@@ -2,7 +2,7 @@
 
 namespace App\Recommendation\Domain\Model\ValueObjects\Llama;
 
-class ModelValueObject
+class Model
 {
     private string $model;
 
@@ -18,7 +18,7 @@ class ModelValueObject
 
     private function initModel(): void
     {
-        $this->model = config('llama.model');
+        $this->model = config("llama.model");
     }
 
     public function getModel(): string

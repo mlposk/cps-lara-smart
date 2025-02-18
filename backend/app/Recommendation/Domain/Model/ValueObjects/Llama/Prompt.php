@@ -2,17 +2,16 @@
 
 namespace App\Recommendation\Domain\Model\ValueObjects\Llama;
 
-class PromptValueObject
+class Prompt
 {
     private string $task;
     private string $data;
     private string $postCondition;
-    private array $taskData;
 
-    public function __construct(array $taskData, bool|null $isPostCondition = null)
-    {
-        $this->postCondition = $isPostCondition ? "true" : "false";
-        $this->taskData = $taskData;
+    public function __construct(
+        private readonly array $taskData,
+        private readonly ?bool $isPostCondition = false
+    ) {
         $this->init();
     }
 
@@ -25,7 +24,7 @@ class PromptValueObject
 
     private function initTask(): void
     {
-        $this->task = 'Сформируй название задачи по методологии SMART для следующей задачи:';
+        $this->task = "Сформируй название задачи по методологии SMART. Если оно уже корректное, верни его без изменений, иначе исправь и объясни, что именно не соответствовало SMART.";
     }
 
     private function initData(): void
@@ -43,8 +42,8 @@ class PromptValueObject
 
     private function initPostCondition(): void
     {
-        if ($this->postCondition === "true") {
-            $this->postCondition = 'Верни следующее: {Только название задачи по SMART без вводного слова} {символ %d%} {Почему она не попадает под SMART, распиши критерии, но не пиши про Time Bound}';
+        if ($this->isPostCondition) {
+            $this->postCondition = "Ответь используя JSON";
         }
     }
 

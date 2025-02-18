@@ -3,20 +3,23 @@
 namespace App\Recommendation\Domain\Model\ValueObjects\Expert;
 
 use App\Recommendation\Domain\Contracts\ValueObjects\Expert\RecommendationExpertInterface;
-use App\Recommendation\Domain\Model\ValueObjects\Llama\ContextValueObject;
-use App\Recommendation\Domain\Model\ValueObjects\Llama\ModelValueObject;
-use App\Recommendation\Domain\Model\ValueObjects\Llama\PromptValueObject;
-use App\Recommendation\Domain\Model\ValueObjects\Llama\StreamValueObject;
+use App\Recommendation\Domain\Model\ValueObjects\Llama\Context;
+use App\Recommendation\Domain\Model\ValueObjects\Llama\Model;
+use App\Recommendation\Domain\Model\ValueObjects\Llama\Prompt;
+use App\Recommendation\Domain\Model\ValueObjects\Llama\Stream;
+use App\Recommendation\Domain\Model\ValueObjects\Llama\ResponseFormat;
 
 class ExpertLlama implements RecommendationExpertInterface
 {
-    private ModelValueObject $model;
+    private Model $model;
 
-    private PromptValueObject $prompt;
+    private Prompt $prompt;
 
-    private ContextValueObject $context;
+    private Context $context;
 
-    private StreamValueObject $stream;
+    private Stream $stream;
+
+    private ResponseFormat $responseFormat;
 
     private array $taskData;
 
@@ -31,6 +34,7 @@ class ExpertLlama implements RecommendationExpertInterface
         $this->initPrompt($isPostCondition);
         $this->initContext();
         $this->initStream();
+        $this->initResponseFormat();
     }
 
     private function initTaskData(array $taskData): void
@@ -40,25 +44,30 @@ class ExpertLlama implements RecommendationExpertInterface
 
     private function initModel(): void
     {
-        $this->model = new ModelValueObject();
+        $this->model = new Model();
     }
 
     private function initPrompt(?bool $isPostCondition): void
     {
-        $this->prompt = new PromptValueObject($this->taskData, $isPostCondition);
+        $this->prompt = new Prompt($this->taskData, $isPostCondition);
     }
 
     private function initContext(): void
     {
-        $this->context = new ContextValueObject();
+        $this->context = new Context();
     }
 
     private function initStream(): void
     {
-        $this->stream = new StreamValueObject();
+        $this->stream = new Stream();
     }
 
-    public function getMessage(array $taskData, ?bool $isPostCondition = null): array
+    private function initResponseFormat(): void
+    {
+        $this->responseFormat = new ResponseFormat();
+    }
+
+    public function getMessage(array $taskData, ?bool $isPostCondition = false): array
     {
         $this->init($taskData, $isPostCondition);
 
@@ -68,9 +77,10 @@ class ExpertLlama implements RecommendationExpertInterface
     private function formMessage(): array
     {
         return [
-            'model' => $this->model->getModel(),
-            'messages' => array_merge($this->context->getContext(), $this->prompt->getPrompt()),
-            'stream' => $this->stream->getStream(),
+            "model" => $this->model->getModel(),
+            "messages" => array_merge($this->context->getContext(), $this->prompt->getPrompt()),
+            "stream" => $this->stream->getStream(),
+            "format" => $this->responseFormat->getFormat()
         ];
     }
 }
