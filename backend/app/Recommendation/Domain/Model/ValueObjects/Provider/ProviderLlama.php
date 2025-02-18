@@ -27,17 +27,17 @@ class ProviderLlama implements RecommendationProviderInterface
     {
         $response_data = $this->getResult($query);
 
-        if (! isset($response_data['message']['content'])) {
-            throw new \DomainException('Invalid response format: content is missing');
+        if (!isset($response_data["message"]["content"])) {
+            throw new \DomainException("Invalid response format: content is missing");
         }
 
-        $response = explode('%d%', $response_data['message']['content']);
+        $response = json_decode($response_data["message"]["content"], true);
 
-        if (count($response) < 2) {
-            throw new \DomainException('Invalid response format: expected 2 parts, but received '.count($response));
+        if (!$response["smartTitle"] || !$response["recommendation"]) {
+            throw new \DomainException("Invalid response format: empty required fields");
         }
 
-        return new ProviderResponse(new SmartTitle($response[0]), new Recommendation($response[1]));
+        return new ProviderResponse(new SmartTitle($response["smartTitle"]), new Recommendation($response["recommendation"]));
     }
 
     /**
